@@ -1,0 +1,8 @@
+server:
+  port: 8189
+  servlet:
+    context-path: /
+
+bot:
+  name: ${BOT_NAME}
+  token: ${BOT_TOKEN}
