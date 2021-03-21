@@ -1,4 +1,4 @@
-package ru.pankov.telegrambot.v2;
+package ru.pankov.telegrambot.bot;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,38 +30,31 @@ public class Bot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage()) {
-            Message message = update.getMessage();
-            Long chatId = message.getChatId();
-            log.info(String.format("Received msg from chat = \"%d\" command = \"%s\"", chatId, message.getText()));
+            //получаю сообщение
+            Message requestMessage = update.getMessage();
+            Long chatId = requestMessage.getChatId();
+            log.info(String.format("Received msg from chat = \"%d\" command = \"%s\"", chatId, requestMessage.getText()));
 
-
-            // проверка на существование сессии
-            // присваивание ей необходимого обработчика
-            // иначе создание и присваивание ей обработчика start
-            // итого у нас есть обработчик, которому мы должны послать сообщение
-            // и само сообщение send, которое мы должны обработать в обработчике и вернуть обратно
-            // вернуть обратно надо в виде объекта response с полями
-            // 1) следующий обработчик
-            // 2) тип отсылаемого сообщения
-            // 3) само сообщение sendMessage
-
+            //получаю метод юзера
             Optional<ChatSession> chatSession = chatSessionService.findSessionById(chatId);
             if (chatSession.isEmpty()) {
-                chatSession = chatSessionService.save(chatId, MessageType.START);
+                chatSession = chatSessionService.save(chatId, MessageType.MAIN);
             }
             MessageType messageType = MessageType.values()[chatSession.get().getMethodId()];
 
+            //составляю базу для ответа
             Response response = new Response();
-            SendMessage sendMessage = new SendMessage();
-            sendMessage.setChatId(String.valueOf(chatId));
-            sendMessage.setParseMode("html");
+            SendMessage responseMessage = new SendMessage();
+            responseMessage.setChatId(String.valueOf(chatId));
+            responseMessage.setParseMode("html");
 
-
+            //составляю ответ
             switch (messageType) {
-                case START:
-                    response = MainHandler.handle(message.getText(), sendMessage);
+                case MAIN:
+                    response = MainHandler.handle(requestMessage, responseMessage);
             }
 
+            //отправляю
             try {
                 execute(response.getMessage());
                 log.info(String.format("Sent msg to chat = \"%d\" command = \"%s\"", chatId, response.getMessageType()));
@@ -69,22 +62,6 @@ public class Bot extends TelegramLongPollingBot {
                 log.error(String.format("Failed to send msg to chat = \"%d\" text = \"%s\"", chatId, response.getMessageType()));
             }
 
-            /*
-            ReplyKeyboardMarkup markup = new ReplyKeyboardMarkup();
-            sendMessage.setReplyMarkup(markup);
-            markup.setSelective(true);
-            markup.setResizeKeyboard(true);
-            markup.setOneTimeKeyboard(false);
-
-            List<KeyboardRow> keyboardRows = new ArrayList<>();
-            KeyboardRow first = new KeyboardRow();
-            first.add("start");
-            KeyboardRow second = new KeyboardRow();
-            first.add("help");
-            keyboardRows.add(first);
-            keyboardRows.add(second);
-            markup.setKeyboard(keyboardRows);
-            */
         }
     }
 
@@ -97,4 +74,14 @@ public class Bot extends TelegramLongPollingBot {
     public String getBotToken() {
         return botToken;
     }
+
+    // проверка на существование сессии
+    // присваивание ей необходимого обработчика
+    // иначе создание и присваивание ей обработчика start
+    // итого у нас есть обработчик, которому мы должны послать сообщение
+    // и само сообщение send, которое мы должны обработать в обработчике и вернуть обратно
+    // вернуть обратно надо в виде объекта response с полями
+    // 1) следующий обработчик
+    // 2) тип отсылаемого сообщения
+    // 3) само сообщение responseMessage
 }

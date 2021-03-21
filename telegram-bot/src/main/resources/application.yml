@@ -6,12 +6,14 @@ server:
 bot:
   name: ${BOT_NAME}
   token: ${BOT_TOKEN}
-
 spring:
-  redis:
-    database: 0
-    host: localhost
-    port: 6379
-    #password: ${REDIS_PW}
-    timeout: 60000
-
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true

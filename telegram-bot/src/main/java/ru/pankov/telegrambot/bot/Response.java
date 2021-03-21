@@ -1,4 +1,4 @@
-package ru.pankov.telegrambot.v2;
+package ru.pankov.telegrambot.bot;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

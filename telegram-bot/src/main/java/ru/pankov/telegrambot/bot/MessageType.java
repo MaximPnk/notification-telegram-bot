@@ -1,5 +1,5 @@
-package ru.pankov.telegrambot.v2;
+package ru.pankov.telegrambot.bot;
 
 public enum MessageType {
-    START, UNSUPPORTED, ERROR;
+    MAIN, START, HELP, UNSUPPORTED, ERROR;
 }
