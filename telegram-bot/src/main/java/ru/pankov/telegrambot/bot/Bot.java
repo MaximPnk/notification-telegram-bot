@@ -10,9 +10,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.pankov.telegrambot.handler.MainHandler;
-import ru.pankov.telegrambot.model.ChatSession;
-
-import java.util.Optional;
+import ru.pankov.telegrambot.model.ChatSessionEntity;
+import ru.pankov.telegrambot.service.ChatSessionService;
 
 @Component
 @Slf4j
@@ -36,19 +35,16 @@ public class Bot extends TelegramLongPollingBot {
             log.info(String.format("Received msg from chat = \"%d\" command = \"%s\"", chatId, requestMessage.getText()));
 
             //получаю метод юзера
-            Optional<ChatSession> chatSession = chatSessionService.findSessionById(chatId);
-            if (chatSession.isEmpty()) {
-                chatSession = chatSessionService.save(chatId, MessageType.MAIN);
-            }
-            MessageType messageType = MessageType.values()[chatSession.get().getMethodId()];
+            ChatSessionEntity chatSession = chatSessionService.getChatSessionById(chatId).orElse(chatSessionService.save(new ChatSessionEntity(chatId, MessageType.MAIN.ordinal())));
+            MessageType messageType = MessageType.values()[chatSession.getMethodId()];
 
-            //составляю базу для ответа
+            //создаю прототип ответа
             Response response = new Response();
             SendMessage responseMessage = new SendMessage();
             responseMessage.setChatId(String.valueOf(chatId));
             responseMessage.setParseMode("html");
 
-            //составляю ответ
+            //заполняю ответ
             switch (messageType) {
                 case MAIN:
                     response = MainHandler.handle(requestMessage, responseMessage);

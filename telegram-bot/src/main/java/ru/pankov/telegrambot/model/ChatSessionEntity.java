@@ -16,11 +16,11 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ChatSession {
+public class ChatSessionEntity {
 
     @Id
     @Column(name = "chat_id")
-    private Integer chatId;
+    private Long chatId;
 
     @Column(name = "method_id")
     private Integer methodId;
