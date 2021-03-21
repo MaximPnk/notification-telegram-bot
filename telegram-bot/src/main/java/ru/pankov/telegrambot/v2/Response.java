@@ -1,9 +1,10 @@
-package ru.pankov.telegrambot.response;
+package ru.pankov.telegrambot.v2;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -11,6 +12,6 @@ import lombok.Setter;
 @Setter
 public class Response {
 
-    private Command command;
-    private String text;
+    private MessageType messageType;
+    private SendMessage message;
 }
