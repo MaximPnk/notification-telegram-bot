@@ -9,6 +9,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.pankov.telegrambot.handler.MainHandler;
+import ru.pankov.telegrambot.model.ChatSession;
 
 import java.util.Optional;
 
@@ -16,6 +18,8 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 public class Bot extends TelegramLongPollingBot {
+
+    private final ChatSessionService chatSessionService;
 
     @Value("${bot.name}")
     String botUsername;
@@ -41,15 +45,11 @@ public class Bot extends TelegramLongPollingBot {
             // 2) тип отсылаемого сообщения
             // 3) само сообщение sendMessage
 
-            Optional<Integer> messageTypeId = repository.getMessageTypeIdByChatId(chatId);
-            MessageType messageType;
-            if (messageTypeId.isPresent()) {
-                messageType = MessageType.values()[messageTypeId.get()];
-            } else {
-                messageType = repository.save(chatId, MessageType.START.ordinal());
+            Optional<ChatSession> chatSession = chatSessionService.findSessionById(chatId);
+            if (chatSession.isEmpty()) {
+                chatSession = chatSessionService.save(chatId, MessageType.START);
             }
-
-            //ChatSession = telegramSessionService.findSessionById(chatId);
+            MessageType messageType = MessageType.values()[chatSession.get().getMethodId()];
 
             Response response = new Response();
             SendMessage sendMessage = new SendMessage();
@@ -59,11 +59,11 @@ public class Bot extends TelegramLongPollingBot {
 
             switch (messageType) {
                 case START:
-
+                    response = MainHandler.handle(message.getText(), sendMessage);
             }
 
             try {
-                execute(sendMessage);
+                execute(response.getMessage());
                 log.info(String.format("Sent msg to chat = \"%d\" command = \"%s\"", chatId, response.getMessageType()));
             } catch (TelegramApiException e) {
                 log.error(String.format("Failed to send msg to chat = \"%d\" text = \"%s\"", chatId, response.getMessageType()));
