@@ -8,9 +8,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.pankov.telegrambot.common.Response;
 import ru.pankov.telegrambot.common.UserSessionStage;
 import ru.pankov.telegrambot.handler.AddHandler;
 import ru.pankov.telegrambot.handler.MainHandler;
@@ -47,11 +45,6 @@ public class Bot extends TelegramLongPollingBot {
             SendMessage responseMessage = new SendMessage();
             responseMessage.setChatId(String.valueOf(chatId));
             responseMessage.setParseMode("html");
-            ReplyKeyboardMarkup markup = new ReplyKeyboardMarkup();
-            responseMessage.setReplyMarkup(markup);
-            markup.setSelective(true);
-            markup.setResizeKeyboard(true);
-            markup.setOneTimeKeyboard(false);
 
             //заполняю ответ
             switch (userSessionStage) {
@@ -63,16 +56,16 @@ public class Bot extends TelegramLongPollingBot {
                     break;
             }
 
-            markup.setKeyboard(response.getKeyboardRows());
-
             //перевожу сессию на другую стадию
             switch (response.getMessageType()) {
                 case START:
                 case HELP:
                 case RETURN:
+                    KeyboardChanger.setMainMenuButtons(responseMessage);
                     chatSession.setUserSessionStage(UserSessionStage.MAIN_STAGE);
                     break;
                 case ADD:
+                    KeyboardChanger.setAddMenuButtons(responseMessage);
                     chatSession.setUserSessionStage(UserSessionStage.ADD_STAGE);
                     break;
             }
@@ -99,13 +92,4 @@ public class Bot extends TelegramLongPollingBot {
         return botToken;
     }
 
-    // проверка на существование сессии
-    // присваивание ей необходимого обработчика
-    // иначе создание и присваивание ей обработчика start
-    // итого у нас есть обработчик, которому мы должны послать сообщение
-    // и само сообщение send, которое мы должны обработать в обработчике и вернуть обратно
-    // вернуть обратно надо в виде объекта response с полями
-    // 1) следующий обработчик
-    // 2) тип отсылаемого сообщения
-    // 3) само сообщение responseMessage
 }
