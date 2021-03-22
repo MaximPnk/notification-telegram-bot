@@ -23,14 +23,16 @@ public class Handler {
 
     protected String getHelpText() {
         return "Для управления ботом необходимо использовать кнопки, которые заменяют клавиатуру." + System.lineSeparator() +
+                "Если произошла ошибка, вы всегда можете воспользоваться командой /return для возврата в главное меню" + System.lineSeparator() +
                 "В случае возникновения вопросов можно обратиться @your_notify_bot";
     }
 
     protected String getUnsupportedText() {
-        return "Пожалуйста, выберите команду из списка";
+        return "Пожалуйста, выберите команду из списка" + System.lineSeparator() +
+                "/help - для получения справочной информации";
     }
 
     protected String getReturnText() {
-        return "Вернёмся в главное меню";
+        return "Возврат в главное меню";
     }
 }

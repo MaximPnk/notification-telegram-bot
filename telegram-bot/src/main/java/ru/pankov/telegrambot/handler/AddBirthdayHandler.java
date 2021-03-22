@@ -25,6 +25,7 @@ public class AddBirthdayHandler extends Handler {
                 response.setMessageType(MessageType.START);
                 break;
             case "Вернуться✔️":
+            case "/return":
                 responseMessage.setText(getReturnText());
                 response.setMessageType(MessageType.RETURN);
                 break;

@@ -2,6 +2,8 @@ package ru.pankov.telegrambot.bot;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import java.util.ArrayList;
@@ -25,6 +27,12 @@ public class KeyboardChanger {
             add(new KeyboardRow() {{ add("Вернуться✔️"); }});
         }};
         markup.setKeyboard(keyboardRows);
+    }
+
+    public static void removeButtons(SendMessage responseMessage) {
+        ReplyKeyboardRemove remove = new ReplyKeyboardRemove();
+        remove.setRemoveKeyboard(true);
+        responseMessage.setReplyMarkup(remove);
     }
 
     private static ReplyKeyboardMarkup addButtons(SendMessage responseMessage) {

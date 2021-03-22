@@ -14,10 +14,6 @@ public class MainHandler extends Handler {
         Response response = new Response();
 
         switch (requestMessage.getText()) {
-            case "/start":
-                responseMessage.setText(getStartText(requestMessage.getFrom().getUserName()));
-                response.setMessageType(MessageType.START);
-                break;
             case "Добавить уведомление✔️":
                 responseMessage.setText(getAddText());
                 response.setMessageType(MessageType.ADD);
@@ -26,7 +22,12 @@ public class MainHandler extends Handler {
                 responseMessage.setText(getHelpText());
                 response.setMessageType(MessageType.HELP);
                 break;
+            case "/start":
+                responseMessage.setText(getStartText(requestMessage.getFrom().getUserName()));
+                response.setMessageType(MessageType.START);
+                break;
             case "Вернуться✔️":
+            case "/return":
                 responseMessage.setText(getReturnText());
                 response.setMessageType(MessageType.RETURN);
                 break;

@@ -14,10 +14,6 @@ public class AddHandler extends Handler {
         Response response = new Response();
 
         switch (requestMessage.getText()) {
-            case "/start":
-                responseMessage.setText(getStartText(requestMessage.getFrom().getUserName()));
-                response.setMessageType(MessageType.START);
-                break;
             case "День рождения✔️":
                 responseMessage.setText(getAddBirthdayNameText());
                 response.setMessageType(MessageType.ADD_BIRTHDAY_NAME);
@@ -26,7 +22,12 @@ public class AddHandler extends Handler {
                 //responseMessage.setText(getAddText());
                 //response.setMessageType(MessageType.ADD);
                 //break;
+            case "/start":
+                responseMessage.setText(getStartText(requestMessage.getFrom().getUserName()));
+                response.setMessageType(MessageType.START);
+                break;
             case "Вернуться✔️":
+            case "/return":
                 responseMessage.setText(getReturnText());
                 response.setMessageType(MessageType.RETURN);
                 break;

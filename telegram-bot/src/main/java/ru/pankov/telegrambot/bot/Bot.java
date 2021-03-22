@@ -79,7 +79,7 @@ public class Bot extends TelegramLongPollingBot {
                     chatSession.setUserSessionStage(UserSessionStage.ADD_STAGE);
                     break;
                 case ADD_BIRTHDAY_NAME:
-                    //TODO убрать markup, вывести клавиатуру
+                    KeyboardChanger.removeButtons(responseMessage);
                     chatSession.setUserSessionStage(UserSessionStage.ADD_BIRTHDAY_NAME_STAGE);
                     break;
                 case ADD_BIRTHDAY_DATE:
