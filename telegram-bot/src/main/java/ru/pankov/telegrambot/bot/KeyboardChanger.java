@@ -21,8 +21,7 @@ public class KeyboardChanger {
     public static void setAddMenuButtons(SendMessage responseMessage) {
         ReplyKeyboardMarkup markup = addButtons(responseMessage);
         List<KeyboardRow> keyboardRows = new ArrayList<>() {{
-            add(new KeyboardRow() {{ add("День рождения✔️"); }});
-            add(new KeyboardRow() {{ add("Другое событие✔️"); }});
+            add(new KeyboardRow() {{ add("День рождения✔️"); add("Другое событие✔️"); }});
             add(new KeyboardRow() {{ add("Вернуться✔️"); }});
         }};
         markup.setKeyboard(keyboardRows);

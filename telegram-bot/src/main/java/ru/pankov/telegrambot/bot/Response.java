@@ -15,4 +15,8 @@ public class Response {
 
     private MessageType messageType;
     private SendMessage message;
+
+    public Response(SendMessage message) {
+        this.message = message;
+    }
 }

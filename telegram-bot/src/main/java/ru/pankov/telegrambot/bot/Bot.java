@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.pankov.telegrambot.common.UserSessionStage;
+import ru.pankov.telegrambot.handler.AddBirthdayHandler;
 import ru.pankov.telegrambot.handler.AddHandler;
 import ru.pankov.telegrambot.handler.MainHandler;
 import ru.pankov.telegrambot.model.ChatSessionEntity;
@@ -21,6 +22,9 @@ import ru.pankov.telegrambot.service.ChatSessionService;
 public class Bot extends TelegramLongPollingBot {
 
     private final ChatSessionService chatSessionService;
+    private final MainHandler mainHandler;
+    private final AddHandler addHandler;
+    private final AddBirthdayHandler addBirthdayHandler;
 
     @Value("${bot.name}")
     String botUsername;
@@ -49,10 +53,16 @@ public class Bot extends TelegramLongPollingBot {
             //заполняю ответ
             switch (userSessionStage) {
                 case MAIN_STAGE:
-                    response = MainHandler.handle(requestMessage, responseMessage);
+                    response = mainHandler.handle(requestMessage, responseMessage);
                     break;
                 case ADD_STAGE:
-                    response = AddHandler.handle(requestMessage, responseMessage);
+                    response = addHandler.handle(requestMessage, responseMessage);
+                    break;
+                case ADD_BIRTHDAY_NAME_STAGE:
+                    response = addBirthdayHandler.handleName(requestMessage, responseMessage);
+                    break;
+                case ADD_BIRTHDAY_DATE_STAGE:
+                    response = addBirthdayHandler.handleDate(requestMessage, responseMessage);
                     break;
             }
 
@@ -67,6 +77,14 @@ public class Bot extends TelegramLongPollingBot {
                 case ADD:
                     KeyboardChanger.setAddMenuButtons(responseMessage);
                     chatSession.setUserSessionStage(UserSessionStage.ADD_STAGE);
+                    break;
+                case ADD_BIRTHDAY_NAME:
+                    //TODO убрать markup, вывести клавиатуру
+                    chatSession.setUserSessionStage(UserSessionStage.ADD_BIRTHDAY_NAME_STAGE);
+                    break;
+                case ADD_BIRTHDAY_DATE:
+                    //TODO вывести markup с датой
+                    chatSession.setUserSessionStage(UserSessionStage.MAIN_STAGE);
                     break;
             }
             chatSessionService.save(chatSession);
