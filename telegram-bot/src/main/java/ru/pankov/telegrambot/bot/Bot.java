@@ -22,9 +22,6 @@ import ru.pankov.telegrambot.service.ChatSessionService;
 public class Bot extends TelegramLongPollingBot {
 
     private final ChatSessionService chatSessionService;
-    private final MainHandler mainHandler;
-    private final AddHandler addHandler;
-    private final AddBirthdayHandler addBirthdayHandler;
 
     @Value("${bot.name}")
     String botUsername;
@@ -53,23 +50,24 @@ public class Bot extends TelegramLongPollingBot {
             //заполняю ответ
             switch (userSessionStage) {
                 case MAIN_STAGE:
-                    response = mainHandler.handle(requestMessage, responseMessage);
+                    response = MainHandler.handle(requestMessage, responseMessage);
                     break;
                 case ADD_STAGE:
-                    response = addHandler.handle(requestMessage, responseMessage);
+                    response = AddHandler.handle(requestMessage, responseMessage);
                     break;
                 case ADD_BIRTHDAY_NAME_STAGE:
-                    response = addBirthdayHandler.handleName(requestMessage, responseMessage);
+                    response = AddBirthdayHandler.handleName(requestMessage, responseMessage, chatSession);
                     break;
                 case ADD_BIRTHDAY_DATE_STAGE:
-                    response = addBirthdayHandler.handleDate(requestMessage, responseMessage);
+                    response = AddBirthdayHandler.handleDate(requestMessage, responseMessage);
                     break;
             }
+
+            //TODO реализовать обработку /start, /help, /return отдельно, а не в каждом классе
 
             //перевожу сессию на другую стадию
             switch (response.getMessageType()) {
                 case START:
-                case HELP:
                 case RETURN:
                     KeyboardChanger.setMainMenuButtons(responseMessage);
                     chatSession.setUserSessionStage(UserSessionStage.MAIN_STAGE);

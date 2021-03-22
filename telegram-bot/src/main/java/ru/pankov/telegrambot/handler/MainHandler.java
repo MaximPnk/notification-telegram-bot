@@ -6,10 +6,9 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.pankov.telegrambot.bot.Response;
 import ru.pankov.telegrambot.common.MessageType;
 
-@Component
 public class MainHandler extends Handler {
 
-    public Response handle(Message requestMessage, SendMessage responseMessage) {
+    public static Response handle(Message requestMessage, SendMessage responseMessage) {
 
         Response response = new Response();
 
@@ -19,6 +18,7 @@ public class MainHandler extends Handler {
                 response.setMessageType(MessageType.ADD);
                 break;
             case "Помощь✔️":
+            case "/help":
                 responseMessage.setText(getHelpText());
                 response.setMessageType(MessageType.HELP);
                 break;

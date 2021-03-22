@@ -1,21 +1,16 @@
 package ru.pankov.telegrambot.handler;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.pankov.telegrambot.bot.Response;
 import ru.pankov.telegrambot.common.MessageType;
 import ru.pankov.telegrambot.model.ChatSessionEntity;
-import ru.pankov.telegrambot.service.ChatSessionService;
 
-@Component
-@RequiredArgsConstructor
+@Slf4j
 public class AddBirthdayHandler extends Handler {
 
-    private final ChatSessionService chatSessionService;
-
-    public Response handleName(Message requestMessage, SendMessage responseMessage) {
+    public static Response handleName(Message requestMessage, SendMessage responseMessage, ChatSessionEntity chatSessionEntity) {
 
         Response response = new Response(responseMessage);
 
@@ -29,8 +24,11 @@ public class AddBirthdayHandler extends Handler {
                 responseMessage.setText(getReturnText());
                 response.setMessageType(MessageType.RETURN);
                 break;
+            case "/help":
+                responseMessage.setText(getHelpText());
+                response.setMessageType(MessageType.HELP);
+                break;
             default:
-                ChatSessionEntity chatSessionEntity = chatSessionService.getChatSessionById(requestMessage.getChatId()).get();
                 chatSessionEntity.setTmpBDName(requestMessage.getText());
                 responseMessage.setText(getAddBirthdayDateText(requestMessage.getText()));
                 response.setMessageType(MessageType.ADD_BIRTHDAY_DATE);
@@ -39,7 +37,7 @@ public class AddBirthdayHandler extends Handler {
         return response;
     }
 
-    public Response handleDate(Message requestMessage, SendMessage responseMessage) {
+    public static Response handleDate(Message requestMessage, SendMessage responseMessage) {
 
         Response response = new Response(responseMessage);
 
