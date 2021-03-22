@@ -8,7 +8,11 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.pankov.telegrambot.common.Response;
+import ru.pankov.telegrambot.common.UserSessionStage;
+import ru.pankov.telegrambot.handler.AddHandler;
 import ru.pankov.telegrambot.handler.MainHandler;
 import ru.pankov.telegrambot.model.ChatSessionEntity;
 import ru.pankov.telegrambot.service.ChatSessionService;
@@ -35,20 +39,44 @@ public class Bot extends TelegramLongPollingBot {
             log.info(String.format("Received msg from chat = \"%d\" command = \"%s\"", chatId, requestMessage.getText()));
 
             //получаю метод юзера
-            ChatSessionEntity chatSession = chatSessionService.getChatSessionById(chatId).orElse(chatSessionService.save(new ChatSessionEntity(chatId, MessageType.MAIN.ordinal())));
-            MessageType messageType = MessageType.values()[chatSession.getMethodId()];
+            ChatSessionEntity chatSession = chatSessionService.getChatSessionById(chatId).orElse(chatSessionService.save(new ChatSessionEntity(chatId, UserSessionStage.MAIN_STAGE)));
+            UserSessionStage userSessionStage = chatSession.getUserSessionStage();
 
             //создаю прототип ответа
             Response response = new Response();
             SendMessage responseMessage = new SendMessage();
             responseMessage.setChatId(String.valueOf(chatId));
             responseMessage.setParseMode("html");
+            ReplyKeyboardMarkup markup = new ReplyKeyboardMarkup();
+            responseMessage.setReplyMarkup(markup);
+            markup.setSelective(true);
+            markup.setResizeKeyboard(true);
+            markup.setOneTimeKeyboard(false);
 
             //заполняю ответ
-            switch (messageType) {
-                case MAIN:
+            switch (userSessionStage) {
+                case MAIN_STAGE:
                     response = MainHandler.handle(requestMessage, responseMessage);
+                    break;
+                case ADD_STAGE:
+                    response = AddHandler.handle(requestMessage, responseMessage);
+                    break;
             }
+
+            markup.setKeyboard(response.getKeyboardRows());
+
+            //перевожу сессию на другую стадию
+            switch (response.getMessageType()) {
+                case START:
+                case HELP:
+                case RETURN:
+                    chatSession.setUserSessionStage(UserSessionStage.MAIN_STAGE);
+                    break;
+                case ADD:
+                    chatSession.setUserSessionStage(UserSessionStage.ADD_STAGE);
+                    break;
+            }
+            chatSessionService.save(chatSession);
 
             //отправляю
             try {
