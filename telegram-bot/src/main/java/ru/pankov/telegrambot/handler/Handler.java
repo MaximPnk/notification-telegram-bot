@@ -1,6 +1,31 @@
 package ru.pankov.telegrambot.handler;
 
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import ru.pankov.telegrambot.bot.Response;
+import ru.pankov.telegrambot.common.MessageType;
+
 public class Handler {
+
+    protected static void handleCommands(Message requestMessage, SendMessage responseMessage, Response response) {
+        switch (requestMessage.getText()) {
+            case "/help":
+                responseMessage.setText(getHelpText());
+                response.setMessageType(MessageType.HELP);
+                response.setMessage(responseMessage);
+                break;
+            case "/start":
+                responseMessage.setText(getStartText(requestMessage.getFrom().getUserName()));
+                response.setMessageType(MessageType.START);
+                response.setMessage(responseMessage);
+                break;
+            case "/return":
+                responseMessage.setText(getReturnText());
+                response.setMessageType(MessageType.RETURN);
+                response.setMessage(responseMessage);
+                break;
+        }
+    }
 
     protected static String getAddText() {
         return "Приступим к созданию нового уведомления." + System.lineSeparator() + System.lineSeparator() +

@@ -63,8 +63,6 @@ public class Bot extends TelegramLongPollingBot {
                     break;
             }
 
-            //TODO реализовать обработку /start, /help, /return отдельно, а не в каждом классе
-
             //перевожу сессию на другую стадию
             switch (response.getMessageType()) {
                 case START:
