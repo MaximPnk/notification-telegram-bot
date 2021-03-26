@@ -16,6 +16,17 @@ import ru.pankov.telegrambot.handler.MainHandler;
 import ru.pankov.telegrambot.model.ChatSessionEntity;
 import ru.pankov.telegrambot.service.ChatSessionService;
 
+/*
+ * TODO
+ * Добавляем микросервис с основной БД
+ * Микросервисы общаются между собой, либо с помощью eureka
+ * Либо загуглить более красивый способ
+ * TODO
+ * Микросервис с основной БД должен периодически проверять даты
+ * В случае успеха добавляет в кафку мсг с инфой по чату и инфе о данном уведомлении
+ * В свою очередь бот чекает в потоке инфу от кафки и при получении шлёт сообщение
+ */
+
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -79,7 +90,7 @@ public class Bot extends TelegramLongPollingBot {
                     chatSession.setUserSessionStage(UserSessionStage.ADD_BIRTHDAY_NAME_STAGE);
                     break;
                 case ADD_BIRTHDAY_DATE:
-                    //TODO вывести markup с датой
+                    KeyboardChanger.setDateButtons(responseMessage, chatSession.getTmpBDDate());
                     chatSession.setUserSessionStage(UserSessionStage.MAIN_STAGE);
                     break;
             }
