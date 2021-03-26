@@ -7,6 +7,9 @@ import ru.pankov.telegrambot.bot.Response;
 import ru.pankov.telegrambot.common.MessageType;
 import ru.pankov.telegrambot.model.ChatSessionEntity;
 
+import java.time.DateTimeException;
+import java.time.LocalDate;
+
 @Slf4j
 public class AddBirthdayHandler extends Handler {
 
@@ -25,24 +28,39 @@ public class AddBirthdayHandler extends Handler {
         return response;
     }
 
-    public static Response handleDate(Message requestMessage, SendMessage responseMessage) {
+    public static Response handleDate(Message requestMessage, SendMessage responseMessage, ChatSessionEntity chatSessionEntity) {
 
         Response response = new Response(responseMessage);
-
-        switch (requestMessage.getText()) {
-            case "/start":
-                responseMessage.setText(getStartText(requestMessage.getFrom().getUserName()));
-                response.setMessageType(MessageType.START);
-                break;
-            case "Вернуться✔️":
-                responseMessage.setText(getReturnText());
-                response.setMessageType(MessageType.RETURN);
-                break;
-            default:
-                responseMessage.setText(getAddBirthdayDateText(requestMessage.getText()));
-                response.setMessageType(MessageType.ADD_BIRTHDAY_DATE);
+        handleCommands(requestMessage, responseMessage, response);
+        if (response.getMessage() != null && response.getMessageType() != null) {
+            return response;
         }
 
+        switch (requestMessage.getText()) {
+            case "<< Пред":
+                LocalDate prev = chatSessionEntity.getTmpBDDate().minusMonths(1).withDayOfMonth(1);
+                chatSessionEntity.setTmpBDDate(prev.compareTo(LocalDate.now()) < 0 ? LocalDate.now() : prev);
+                responseMessage.setText("Назад");
+                response.setMessageType(MessageType.ADD_BIRTHDAY_DATE);
+                break;
+            case "След >>":
+                chatSessionEntity.setTmpBDDate(chatSessionEntity.getTmpBDDate().plusMonths(1).withDayOfMonth(1));
+                responseMessage.setText("Вперёд");
+                response.setMessageType(MessageType.ADD_BIRTHDAY_DATE);
+                break;
+            default:
+                try {
+                    int day = Integer.parseInt(requestMessage.getText());
+                    LocalDate bd = chatSessionEntity.getTmpBDDate().withDayOfMonth(day);
+                    chatSessionEntity.setTmpBDDate(bd);
+                } catch (NumberFormatException | DateTimeException e) {
+                    responseMessage.setText("Неверно указана дата");
+                    response.setMessageType(MessageType.ADD_BIRTHDAY_DATE);
+                    return response;
+                }
+                responseMessage.setText(getCreateBirthdayText());
+                response.setMessageType(MessageType.CREATE_BIRTHDAY);
+        }
         return response;
     }
 

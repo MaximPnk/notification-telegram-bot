@@ -40,6 +40,10 @@ public class Handler {
         return "Отлично, давай выберем дату дня рождения для " + name;
     }
 
+    protected static String getCreateBirthdayText() {
+        return "Уведомление успешно добавлено";
+    }
+
     protected static String getStartText(String userName) {
         return "Привет, " + userName + "!\uD83D\uDC4B\uD83C\uDFFC" + System.lineSeparator() + System.lineSeparator() +
                 "Я твой бот, который поможет тебе никогда не забывать о дне рождения, списке дел или предстоящем мероприятии❗️" + System.lineSeparator() + System.lineSeparator() +

@@ -40,8 +40,8 @@ public class KeyboardChanger {
 
         List<KeyboardRow> keyboardRows = new ArrayList<>();
         keyboardRows.add(new KeyboardRow() {{
-            add(LocalDate.now().getMonth().getValue() <= init.getMonth().getValue() ? " " : "<< Пред");
-            add(monthNames[init.getMonth().getValue()] + " " + init.getYear());
+            add(init.getMonth().getValue() <= LocalDate.now().getMonth().getValue() && init.getYear() <= LocalDate.now().getYear() ? " " : "<< Пред");
+            add(monthNames[init.getMonth().getValue() - 1] + " " + init.getYear());
             add("След >>");
         }});
 //        keyboardRows.add(new KeyboardRow() {{ add("Пн"); add("Вт"); add("Ср"); add("Чт"); add("Пт"); add("Сб"); add("Вс"); }});

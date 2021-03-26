@@ -9,12 +9,15 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.pankov.telegrambot.common.MessageType;
 import ru.pankov.telegrambot.common.UserSessionStage;
 import ru.pankov.telegrambot.handler.AddBirthdayHandler;
 import ru.pankov.telegrambot.handler.AddHandler;
 import ru.pankov.telegrambot.handler.MainHandler;
 import ru.pankov.telegrambot.model.ChatSessionEntity;
 import ru.pankov.telegrambot.service.ChatSessionService;
+
+import java.time.LocalDate;
 
 /*
  * TODO
@@ -70,7 +73,11 @@ public class Bot extends TelegramLongPollingBot {
                     response = AddBirthdayHandler.handleName(requestMessage, responseMessage, chatSession);
                     break;
                 case ADD_BIRTHDAY_DATE_STAGE:
-                    response = AddBirthdayHandler.handleDate(requestMessage, responseMessage);
+                    response = AddBirthdayHandler.handleDate(requestMessage, responseMessage, chatSession);
+                    if (response.getMessageType() != MessageType.ADD_BIRTHDAY_DATE) {
+                        //TODO добавление в базу если msgtype = create_bd
+                        chatSession.setTmpBDDate(LocalDate.now());
+                    }
                     break;
             }
 
@@ -78,6 +85,7 @@ public class Bot extends TelegramLongPollingBot {
             switch (response.getMessageType()) {
                 case START:
                 case RETURN:
+                case CREATE_BIRTHDAY:
                     KeyboardChanger.setMainMenuButtons(responseMessage);
                     chatSession.setUserSessionStage(UserSessionStage.MAIN_STAGE);
                     break;
@@ -91,7 +99,7 @@ public class Bot extends TelegramLongPollingBot {
                     break;
                 case ADD_BIRTHDAY_DATE:
                     KeyboardChanger.setDateButtons(responseMessage, chatSession.getTmpBDDate());
-                    chatSession.setUserSessionStage(UserSessionStage.MAIN_STAGE);
+                    chatSession.setUserSessionStage(UserSessionStage.ADD_BIRTHDAY_DATE_STAGE);
                     break;
             }
             chatSessionService.save(chatSession);
