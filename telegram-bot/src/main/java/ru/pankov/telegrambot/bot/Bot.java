@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.pankov.common.NotificationDTO;
 import ru.pankov.common.NotificationParams;
 import ru.pankov.common.NotificationType;
 import ru.pankov.telegrambot.common.MessageType;
@@ -21,6 +22,8 @@ import ru.pankov.telegrambot.model.ChatSessionEntity;
 import ru.pankov.telegrambot.service.ChatSessionService;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -112,7 +115,8 @@ public class Bot extends TelegramLongPollingBot {
                     if (!notifications.isEmpty()) {
                         response.getMessage().setText("Список твоих уведомлений:" + System.lineSeparator() + System.lineSeparator() +
                                 notifications.stream()
-                                    .map(n -> n.getType().getValue() + " - " + n.getText() + " - " + n.getDate())
+                                    .sorted(Comparator.comparing(NotificationDTO::getDate))
+                                    .map(n -> n.getType().getValue() + " - " + n.getText() + " - " + n.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")))
                                     .collect(Collectors.joining(System.lineSeparator())));
                     }
                     break;
