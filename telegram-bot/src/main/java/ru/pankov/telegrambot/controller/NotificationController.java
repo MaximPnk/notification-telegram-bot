@@ -9,8 +9,6 @@ import ru.pankov.common.NotificationDTO;
 import ru.pankov.common.NotificationParams;
 
 import javax.annotation.PostConstruct;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -27,9 +25,7 @@ public class NotificationController {
     }
 
     public List<NotificationDTO> getByChatId(Long chatId) {
-        List<NotificationDTO> notifications = mapper.convertValue(notificationClient.getByChatId(chatId).getBody().getMessage(), new TypeReference<>() {});
-//        return (List<NotificationDTO>) notificationClient.getByChatId(chatId).getBody().getMessage();
-        return notifications;
+        return mapper.convertValue(notificationClient.getByChatId(chatId).getBody().getMessage(), new TypeReference<>() {});
     }
 
     public void create(NotificationParams params) {

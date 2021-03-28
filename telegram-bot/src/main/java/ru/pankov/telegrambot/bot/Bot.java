@@ -9,25 +9,24 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.pankov.common.NotificationDTO;
 import ru.pankov.common.NotificationParams;
 import ru.pankov.common.NotificationType;
 import ru.pankov.telegrambot.common.MessageType;
 import ru.pankov.telegrambot.common.UserSessionStage;
 import ru.pankov.telegrambot.controller.NotificationController;
-import ru.pankov.telegrambot.handler.AddBirthdayHandler;
-import ru.pankov.telegrambot.handler.AddHandler;
-import ru.pankov.telegrambot.handler.MainHandler;
+import ru.pankov.telegrambot.handler.*;
 import ru.pankov.telegrambot.model.ChatSessionEntity;
 import ru.pankov.telegrambot.service.ChatSessionService;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
+ * TODO
+ * разнести Bot по методам
+ * TODO
+ * реализовать добавление событий
+ * TODO
+ * если др, то добавлять сразу в базу подготовительное уведомление
  * TODO
  * Микросервис с основной БД должен периодически проверять даты (scheduler)
  * В случае успеха добавляет в кафку мсг с инфой по чату и инфе о данном уведомлении
@@ -69,7 +68,7 @@ public class Bot extends TelegramLongPollingBot {
             //заполняю ответ
             switch (userSessionStage) {
                 case MAIN_STAGE:
-                    response = MainHandler.handle(requestMessage, responseMessage);
+                    response = MainHandler.handle(requestMessage, responseMessage, notificationController.getByChatId(chatId));
                     break;
                 case ADD_STAGE:
                     response = AddHandler.handle(requestMessage, responseMessage);
@@ -83,10 +82,21 @@ public class Bot extends TelegramLongPollingBot {
                         chatSession.setTmpBDDate(LocalDate.now());
                     }
                     break;
+                case GET_STAGE:
+                    response = GetHandler.handle(requestMessage, responseMessage);
+                    break;
+                case DELETE_LIST_STAGE:
+                    response = DeleteHandler.handleList(requestMessage, responseMessage, notificationController.getByChatId(chatId), chatSession);
+                    break;
+                case DELETE_CONFIRM_STAGE:
+                    response = DeleteHandler.handleConfirm(requestMessage, responseMessage, notificationController.getByChatId(chatId));
+                    break;
             }
 
             //перевожу сессию на другую стадию
             switch (response.getMessageType()) {
+                case DELETE:
+                    notificationController.deleteById(chatSession.getTmpNotificationId());
                 case START:
                 case RETURN:
                     KeyboardChanger.setMainMenuButtons(responseMessage);
@@ -111,14 +121,16 @@ public class Bot extends TelegramLongPollingBot {
                     chatSession.setTmpBDDate(LocalDate.now());
                     break;
                 case GET:
-                    var notifications = notificationController.getByChatId(chatId);
-                    if (!notifications.isEmpty()) {
-                        response.getMessage().setText("Список твоих уведомлений:" + System.lineSeparator() + System.lineSeparator() +
-                                notifications.stream()
-                                    .sorted(Comparator.comparing(NotificationDTO::getDate))
-                                    .map(n -> n.getType().getValue() + " - " + n.getText() + " - " + n.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")))
-                                    .collect(Collectors.joining(System.lineSeparator())));
-                    }
+                    KeyboardChanger.setGetButtons(responseMessage);
+                    chatSession.setUserSessionStage(UserSessionStage.GET_STAGE);
+                    break;
+                case DELETE_LIST:
+                    KeyboardChanger.setDeleteButtons(responseMessage, notificationController.getByChatId(chatId));
+                    chatSession.setUserSessionStage(UserSessionStage.DELETE_LIST_STAGE);
+                    break;
+                case DELETE_CONFIRM:
+                    KeyboardChanger.setDeleteConfirmButtons(responseMessage);
+                    chatSession.setUserSessionStage(UserSessionStage.DELETE_CONFIRM_STAGE);
                     break;
 
             }

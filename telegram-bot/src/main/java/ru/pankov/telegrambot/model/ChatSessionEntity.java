@@ -30,6 +30,9 @@ public class ChatSessionEntity {
     @CreationTimestamp
     private LocalDate tmpBDDate;
 
+    @Column(name = "tmp_notification_id")
+    private Long tmpNotificationId;
+
     public ChatSessionEntity(Long chatId, UserSessionStage userSessionStage) {
         this.chatId = chatId;
         this.userSessionStage = userSessionStage;

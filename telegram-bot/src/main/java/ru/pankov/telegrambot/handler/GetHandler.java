@@ -1,18 +1,13 @@
 package ru.pankov.telegrambot.handler;
 
-import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import ru.pankov.common.NotificationDTO;
 import ru.pankov.telegrambot.bot.Response;
 import ru.pankov.telegrambot.common.MessageType;
 
-import java.util.List;
+public class GetHandler extends Handler {
 
-@Slf4j
-public class MainHandler extends Handler {
-
-    public static Response handle(Message requestMessage, SendMessage responseMessage, List<NotificationDTO> notifications) {
+    public static Response handle(Message requestMessage, SendMessage responseMessage) {
 
         Response response = new Response();
         handleCommands(requestMessage, responseMessage, response);
@@ -21,17 +16,9 @@ public class MainHandler extends Handler {
         }
 
         switch (requestMessage.getText()) {
-            case "Добавить уведомление✔️":
-                responseMessage.setText(getAddText());
-                response.setMessageType(MessageType.ADD);
-                break;
-            case "Список моих уведомлений✔️":
-                responseMessage.setText(getGetText(notifications));
-                response.setMessageType(MessageType.GET);
-                break;
-            case "Помощь✔️":
-                responseMessage.setText(getHelpText());
-                response.setMessageType(MessageType.HELP);
+            case "Удалить по номеру✔️":
+                responseMessage.setText(getDeleteText());
+                response.setMessageType(MessageType.DELETE_LIST);
                 break;
             case "Вернуться✔️":
                 responseMessage.setText(getReturnText());

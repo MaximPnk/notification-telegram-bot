@@ -5,6 +5,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
+import ru.pankov.common.NotificationDTO;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -58,6 +59,35 @@ public class KeyboardChanger {
                 }
             }
         }
+        markup.setKeyboard(keyboardRows);
+    }
+
+    public static void setGetButtons(SendMessage responseMessage) {
+        ReplyKeyboardMarkup markup = addButtons(responseMessage);
+        List<KeyboardRow> keyboardRows = new ArrayList<>() {{
+            add(new KeyboardRow() {{ add("Удалить по номеру✔️"); }});
+            add(new KeyboardRow() {{ add("Вернуться✔️"); }});
+        }};
+        markup.setKeyboard(keyboardRows);
+    }
+
+    public static void setDeleteButtons(SendMessage responseMessage, List<NotificationDTO> notifications) {
+        ReplyKeyboardMarkup markup = addButtons(responseMessage);
+        int numberOfRows = notifications.size() % 4 == 0 ? notifications.size() / 4 : notifications.size() / 4 + 1;
+        List<KeyboardRow> keyboardRows = new ArrayList<>();
+        for (int i = 0, k = 0; i < numberOfRows; i++) {
+            keyboardRows.add(new KeyboardRow());
+            for (int j = 0; j < 4 && k < notifications.size(); j++) {
+                keyboardRows.get(i).add(String.valueOf(notifications.get(k++).getId()));
+            }
+        }
+        keyboardRows.add(new KeyboardRow() {{ add("Вернуться✔️"); }});
+        markup.setKeyboard(keyboardRows);
+    }
+
+    public static void setDeleteConfirmButtons(SendMessage responseMessage) {
+        ReplyKeyboardMarkup markup = addButtons(responseMessage);
+        List<KeyboardRow> keyboardRows = new ArrayList<>() {{ add(new KeyboardRow() {{ add("Да✔️"); add("Нет✔️"); }}); }};
         markup.setKeyboard(keyboardRows);
     }
 
