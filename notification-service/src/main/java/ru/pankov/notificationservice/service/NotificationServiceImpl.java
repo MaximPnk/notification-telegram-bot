@@ -5,6 +5,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import ru.pankov.common.Header;
+import ru.pankov.common.NotificationDTO;
 import ru.pankov.common.NotificationParams;
 import ru.pankov.notificationservice.dao.NotificationRepository;
 import ru.pankov.notificationservice.entity.NotificationEntity;
@@ -30,8 +31,8 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     @Transactional
     public Header findByChatId(Long chatId) {
-        List<NotificationEntity> notifications = notificationRepository.findByChatId(chatId);
-        return Header.ok(notifications);
+        List<NotificationEntity> notifications = notificationRepository.findByChatIdAndIsAdvanceFalse(chatId);
+        return Header.ok(notifications.stream().map(n -> new NotificationDTO(n.getId(), n.getNotificationType(), n.getDate(), n.getText())));
     }
 
     @Override

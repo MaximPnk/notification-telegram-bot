@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface NotificationRepository extends JpaRepository<NotificationEntity, Long> {
 
-    List<NotificationEntity> findByChatId(Long chatId);
+    List<NotificationEntity> findByChatIdAndIsAdvanceFalse(Long chatId);
 }
