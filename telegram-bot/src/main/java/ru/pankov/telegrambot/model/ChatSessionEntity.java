@@ -1,9 +1,8 @@
 package ru.pankov.telegrambot.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import ru.pankov.telegrambot.common.UserSessionStage;
 
@@ -12,10 +11,8 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "chat_session")
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
 public class ChatSessionEntity {
 
     @Id

@@ -2,3 +2,4 @@
 /out
 /.idea
 *.iml
+/telegram-bot/src/main/resources/secret.properties
