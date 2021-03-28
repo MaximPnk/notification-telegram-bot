@@ -4,3 +4,4 @@
 *.iml
 /telegram-bot/src/main/resources/secret.properties
 /notification-service/src/main/resources/secret.properties
+/discovery-server/src/main/resources/secret.properties
