@@ -21,6 +21,8 @@ import ru.pankov.telegrambot.model.ChatSessionEntity;
 import ru.pankov.telegrambot.service.ChatSessionService;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * TODO
@@ -104,6 +106,15 @@ public class Bot extends TelegramLongPollingBot {
                     KeyboardChanger.setMainMenuButtons(responseMessage);
                     chatSession.setUserSessionStage(UserSessionStage.MAIN_STAGE);
                     chatSession.setTmpBDDate(LocalDate.now());
+                    break;
+                case GET:
+                    var notifications = notificationController.getByChatId(chatId);
+                    if (!notifications.isEmpty()) {
+                        response.getMessage().setText("Список твоих уведомлений:" + System.lineSeparator() + System.lineSeparator() +
+                                notifications.stream()
+                                    .map(n -> n.getType().getValue() + " - " + n.getText() + " - " + n.getDate())
+                                    .collect(Collectors.joining(System.lineSeparator())));
+                    }
                     break;
 
             }

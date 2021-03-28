@@ -20,6 +20,7 @@ public class NotificationController {
 
     @GetMapping("/{chatId}")
     public ResponseEntity<Header> getByChatId(@PathVariable Long chatId) {
+        log.info("Received get request");
         return new ResponseEntity<>(notificationService.findByChatId(chatId), HttpStatus.OK);
     }
 
@@ -32,6 +33,7 @@ public class NotificationController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Header> deleteById(@PathVariable Long id) {
+        log.info("Received delete request");
         notificationService.deleteById(id);
         return new ResponseEntity<>(Header.ok(), HttpStatus.OK);
     }

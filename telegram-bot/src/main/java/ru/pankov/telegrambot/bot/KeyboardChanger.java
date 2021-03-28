@@ -19,6 +19,7 @@ public class KeyboardChanger {
         ReplyKeyboardMarkup markup = addButtons(responseMessage);
         List<KeyboardRow> keyboardRows = new ArrayList<>() {{
             add(new KeyboardRow() {{ add("Добавить уведомление✔️"); }});
+            add(new KeyboardRow() {{ add("Список моих уведомлений✔️"); }});
             add(new KeyboardRow() {{ add("Помощь✔️"); }});
         }};
         markup.setKeyboard(keyboardRows);

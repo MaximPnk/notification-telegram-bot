@@ -1,10 +1,12 @@
 package ru.pankov.telegrambot.handler;
 
+import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.pankov.telegrambot.bot.Response;
 import ru.pankov.telegrambot.common.MessageType;
 
+@Slf4j
 public class MainHandler extends Handler {
 
     public static Response handle(Message requestMessage, SendMessage responseMessage) {
@@ -20,6 +22,11 @@ public class MainHandler extends Handler {
                 responseMessage.setText(getAddText());
                 response.setMessageType(MessageType.ADD);
                 break;
+            case "Список моих уведомлений✔️":
+                responseMessage.setText("Список уведомлений пуст");
+                response.setMessageType(MessageType.GET);
+                break;
+//                log.info("Обработчик списка. Тип мсг = " + response.se);
             case "Помощь✔️":
                 responseMessage.setText(getHelpText());
                 response.setMessageType(MessageType.HELP);
