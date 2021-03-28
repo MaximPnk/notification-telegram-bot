@@ -1,0 +1,16 @@
+server:
+  port: 5555
+  servlet:
+    context-path: /notification-service
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${pg.url}
+    username: ${pg.user}
+    password: ${pg.password}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+
+
