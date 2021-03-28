@@ -7,7 +7,7 @@ import ru.pankov.common.Header;
 import ru.pankov.common.NotificationParams;
 
 @FeignClient("notification-service")
-@RequestMapping("/notification")
+@RequestMapping("/notification-service/notification")
 public interface NotificationClient {
 
     @GetMapping("/{chatId}")

@@ -9,8 +9,11 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.pankov.common.NotificationParams;
+import ru.pankov.common.NotificationType;
 import ru.pankov.telegrambot.common.MessageType;
 import ru.pankov.telegrambot.common.UserSessionStage;
+import ru.pankov.telegrambot.controller.NotificationController;
 import ru.pankov.telegrambot.handler.AddBirthdayHandler;
 import ru.pankov.telegrambot.handler.AddHandler;
 import ru.pankov.telegrambot.handler.MainHandler;
@@ -19,15 +22,11 @@ import ru.pankov.telegrambot.service.ChatSessionService;
 
 import java.time.LocalDate;
 
-/*
+/**
  * TODO
- * Добавляем микросервис с основной БД
- * Микросервисы общаются между собой, либо с помощью eureka
- * Либо загуглить более красивый способ
- * TODO
- * Микросервис с основной БД должен периодически проверять даты
+ * Микросервис с основной БД должен периодически проверять даты (scheduler)
  * В случае успеха добавляет в кафку мсг с инфой по чату и инфе о данном уведомлении
- * В свою очередь бот чекает в потоке инфу от кафки и при получении шлёт сообщение
+ * В свою очередь бот чекает инфу из кафки и при получении шлёт сообщение
  */
 
 @Component
@@ -36,6 +35,7 @@ import java.time.LocalDate;
 public class Bot extends TelegramLongPollingBot {
 
     private final ChatSessionService chatSessionService;
+    private final NotificationController notificationController;
 
     @Value("${bot.name}")
     String botUsername;
@@ -74,8 +74,7 @@ public class Bot extends TelegramLongPollingBot {
                     break;
                 case ADD_BIRTHDAY_DATE_STAGE:
                     response = AddBirthdayHandler.handleDate(requestMessage, responseMessage, chatSession);
-                    if (response.getMessageType() != MessageType.ADD_BIRTHDAY_DATE) {
-                        //TODO добавление в базу если msgtype = create_bd
+                    if (response.getMessageType() != MessageType.ADD_BIRTHDAY_DATE && response.getMessageType() != MessageType.CREATE_BIRTHDAY) {
                         chatSession.setTmpBDDate(LocalDate.now());
                     }
                     break;
@@ -85,7 +84,6 @@ public class Bot extends TelegramLongPollingBot {
             switch (response.getMessageType()) {
                 case START:
                 case RETURN:
-                case CREATE_BIRTHDAY:
                     KeyboardChanger.setMainMenuButtons(responseMessage);
                     chatSession.setUserSessionStage(UserSessionStage.MAIN_STAGE);
                     break;
@@ -101,6 +99,13 @@ public class Bot extends TelegramLongPollingBot {
                     KeyboardChanger.setDateButtons(responseMessage, chatSession.getTmpBDDate());
                     chatSession.setUserSessionStage(UserSessionStage.ADD_BIRTHDAY_DATE_STAGE);
                     break;
+                case CREATE_BIRTHDAY:
+                    notificationController.create(new NotificationParams(chatId, chatSession.getTmpBDDate(), NotificationType.BIRTHDAY, chatSession.getTmpBDName()));
+                    KeyboardChanger.setMainMenuButtons(responseMessage);
+                    chatSession.setUserSessionStage(UserSessionStage.MAIN_STAGE);
+                    chatSession.setTmpBDDate(LocalDate.now());
+                    break;
+
             }
             chatSessionService.save(chatSession);
 

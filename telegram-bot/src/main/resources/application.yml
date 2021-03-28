@@ -17,3 +17,11 @@ spring:
       enabled: true
       settings:
         web-allow-others: false
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${host}:3000/eureka/
+

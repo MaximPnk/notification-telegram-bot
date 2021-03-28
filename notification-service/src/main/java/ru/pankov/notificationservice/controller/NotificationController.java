@@ -1,6 +1,7 @@
 package ru.pankov.notificationservice.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import ru.pankov.notificationservice.service.NotificationService;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/notification")
+@Slf4j
 public class NotificationController {
 
     private final NotificationService notificationService;
@@ -23,6 +25,7 @@ public class NotificationController {
 
     @PostMapping("/")
     public ResponseEntity<Header> create(@RequestBody NotificationParams params) {
+        log.info("Received create request");
         notificationService.save(params);
         return new ResponseEntity<>(Header.ok(), HttpStatus.OK);
     }
