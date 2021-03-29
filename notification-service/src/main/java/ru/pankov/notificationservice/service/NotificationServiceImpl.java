@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import ru.pankov.common.Header;
 import ru.pankov.common.NotificationDTO;
 import ru.pankov.common.NotificationParams;
+import ru.pankov.common.NotificationType;
 import ru.pankov.notificationservice.dao.NotificationRepository;
 import ru.pankov.notificationservice.entity.NotificationEntity;
 
@@ -30,7 +31,9 @@ public class NotificationServiceImpl implements NotificationService {
     @Transactional
     public CompletableFuture<Header> save(NotificationParams params) {
         NotificationEntity notificationEntity = notificationRepository.save(new NotificationEntity(params));
-        publisher.publishEvent(new AddAdvanceBirthdayNotify(this, notificationEntity));
+        if (params.getType() == NotificationType.BIRTHDAY) {
+            publisher.publishEvent(new AddAdvanceBirthdayNotify(this, notificationEntity));
+        }
         return CompletableFuture.completedFuture(Header.ok(notificationEntity));
     }
 

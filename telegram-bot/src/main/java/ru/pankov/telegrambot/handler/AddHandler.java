@@ -20,10 +20,10 @@ public class AddHandler extends Handler {
                 responseMessage.setText(getAddBirthdayNameText());
                 response.setMessageType(MessageType.ADD_BIRTHDAY_NAME);
                 break;
-            case "Другое событие✔️":
-                //responseMessage.setText(getAddText());
-                //response.setMessageType(MessageType.ADD);
-                //break;
+            case "Событие✔️":
+                responseMessage.setText(getAddEventNameText());
+                response.setMessageType(MessageType.ADD_EVENT_NAME);
+                break;
             case "Вернуться✔️":
                 responseMessage.setText(getReturnText());
                 response.setMessageType(MessageType.RETURN);

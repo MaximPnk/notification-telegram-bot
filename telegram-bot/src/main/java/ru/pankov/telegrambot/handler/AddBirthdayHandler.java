@@ -58,7 +58,7 @@ public class AddBirthdayHandler extends Handler {
                     response.setMessageType(MessageType.ADD_BIRTHDAY_DATE);
                     return response;
                 }
-                responseMessage.setText(getCreateBirthdayText());
+                responseMessage.setText(getCreateText());
                 response.setMessageType(MessageType.CREATE_BIRTHDAY);
         }
         return response;

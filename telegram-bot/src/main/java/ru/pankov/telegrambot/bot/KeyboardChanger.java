@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import ru.pankov.common.NotificationDTO;
+import ru.pankov.telegrambot.model.ChatSessionEntity;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,6 +16,9 @@ import java.util.List;
 public class KeyboardChanger {
 
     private final static String[] monthNames = { "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" };
+    private final static String[] hours = { "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23" };
+    private final static String[] minutes = { "00", "15", "30", "45" };
+
 
     public static void setMainMenuButtons(SendMessage responseMessage) {
         ReplyKeyboardMarkup markup = addButtons(responseMessage);
@@ -29,7 +33,7 @@ public class KeyboardChanger {
     public static void setAddMenuButtons(SendMessage responseMessage) {
         ReplyKeyboardMarkup markup = addButtons(responseMessage);
         List<KeyboardRow> keyboardRows = new ArrayList<>() {{
-            add(new KeyboardRow() {{ add("День рождения✔️"); add("Другое событие✔️"); }});
+            add(new KeyboardRow() {{ add("День рождения✔️"); add("Событие✔️"); }});
             add(new KeyboardRow() {{ add("Вернуться✔️"); }});
         }};
         markup.setKeyboard(keyboardRows);
@@ -59,6 +63,27 @@ public class KeyboardChanger {
                 }
             }
         }
+        markup.setKeyboard(keyboardRows);
+    }
+
+    public static void setHoursButtons(SendMessage responseMessage) {
+        ReplyKeyboardMarkup markup = addButtons(responseMessage);
+        List<KeyboardRow> keyboardRows = new ArrayList<>();
+        for (int i = 0, k = 0; i < 4; i++) {
+            keyboardRows.add(new KeyboardRow());
+            for (int j = 0; j < 6; j++) {
+                keyboardRows.get(i).add(hours[k++]);
+            }
+        }
+        markup.setKeyboard(keyboardRows);
+    }
+
+    public static void setMinutesButtons(SendMessage responseMessage, ChatSessionEntity entity) {
+        ReplyKeyboardMarkup markup = addButtons(responseMessage);
+        List<KeyboardRow> keyboardRows = new ArrayList<>() {{
+            add(new KeyboardRow() {{ add(entity.getTmpBDDate().getHour() + ":" + minutes[0]); add(entity.getTmpBDDate().getHour() + ":" + minutes[1]); }});
+            add(new KeyboardRow() {{ add(entity.getTmpBDDate().getHour() + ":" + minutes[2]); add(entity.getTmpBDDate().getHour() + ":" + minutes[3]); }});
+        }};
         markup.setKeyboard(keyboardRows);
     }
 

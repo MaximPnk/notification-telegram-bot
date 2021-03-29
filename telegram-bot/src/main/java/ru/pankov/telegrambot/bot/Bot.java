@@ -26,8 +26,6 @@ import java.time.LocalDateTime;
  * TODO
  * реализовать добавление событий
  * TODO
- * если др, то триггером добавлять сразу в базу подготовительное уведомление (listener)
- * TODO
  * Микросервис с основной БД должен периодически проверять даты (scheduler)
  * В случае успеха добавляет в кафку мсг с инфой по чату и инфе о данном уведомлении
  * В свою очередь бот чекает инфу из кафки и при получении шлёт сообщение
@@ -82,6 +80,27 @@ public class Bot extends TelegramLongPollingBot {
                         chatSession.setTmpBDDate(LocalDateTime.now());
                     }
                     break;
+                case ADD_EVENT_NAME_STAGE:
+                    response = AddEventHandler.handleName(requestMessage, responseMessage, chatSession);
+                    break;
+                case ADD_EVENT_DATE_STAGE:
+                    response = AddEventHandler.handleDate(requestMessage, responseMessage, chatSession);
+                    if (response.getMessageType() != MessageType.ADD_EVENT_DATE && response.getMessageType() != MessageType.ADD_EVENT_HOURS) {
+                        chatSession.setTmpBDDate(LocalDateTime.now());
+                    }
+                    break;
+                case ADD_EVENT_HOURS_STAGE:
+                    response = AddEventHandler.handleHours(requestMessage, responseMessage, chatSession);
+                    if (response.getMessageType() != MessageType.ADD_EVENT_HOURS && response.getMessageType() != MessageType.ADD_EVENT_MINUTES) {
+                        chatSession.setTmpBDDate(LocalDateTime.now());
+                    }
+                    break;
+                case ADD_EVENT_MINUTES_STAGE:
+                    response = AddEventHandler.handleMinutes(requestMessage, responseMessage, chatSession);
+                    if (response.getMessageType() != MessageType.ADD_EVENT_MINUTES && response.getMessageType() != MessageType.CREATE_EVENT) {
+                        chatSession.setTmpBDDate(LocalDateTime.now());
+                    }
+                    break;
                 case GET_STAGE:
                     response = GetHandler.handle(requestMessage, responseMessage);
                     break;
@@ -116,6 +135,28 @@ public class Bot extends TelegramLongPollingBot {
                     break;
                 case CREATE_BIRTHDAY:
                     notificationController.create(new NotificationParams(chatId, chatSession.getTmpBDDate(), NotificationType.BIRTHDAY, chatSession.getTmpBDName()));
+                    KeyboardChanger.setMainMenuButtons(responseMessage);
+                    chatSession.setUserSessionStage(UserSessionStage.MAIN_STAGE);
+                    chatSession.setTmpBDDate(LocalDateTime.now());
+                    break;
+                case ADD_EVENT_NAME:
+                    KeyboardChanger.removeButtons(responseMessage);
+                    chatSession.setUserSessionStage(UserSessionStage.ADD_EVENT_NAME_STAGE);
+                    break;
+                case ADD_EVENT_DATE:
+                    KeyboardChanger.setDateButtons(responseMessage, chatSession.getTmpBDDate());
+                    chatSession.setUserSessionStage(UserSessionStage.ADD_EVENT_DATE_STAGE);
+                    break;
+                case ADD_EVENT_HOURS:
+                    KeyboardChanger.setHoursButtons(responseMessage);
+                    chatSession.setUserSessionStage(UserSessionStage.ADD_EVENT_HOURS_STAGE);
+                    break;
+                case ADD_EVENT_MINUTES:
+                    KeyboardChanger.setMinutesButtons(responseMessage, chatSession);
+                    chatSession.setUserSessionStage(UserSessionStage.ADD_EVENT_MINUTES_STAGE);
+                    break;
+                case CREATE_EVENT:
+                    notificationController.create(new NotificationParams(chatId, chatSession.getTmpBDDate(), NotificationType.EVENT, chatSession.getTmpBDName()));
                     KeyboardChanger.setMainMenuButtons(responseMessage);
                     chatSession.setUserSessionStage(UserSessionStage.MAIN_STAGE);
                     chatSession.setTmpBDDate(LocalDateTime.now());

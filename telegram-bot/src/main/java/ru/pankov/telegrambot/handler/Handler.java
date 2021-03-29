@@ -3,6 +3,7 @@ package ru.pankov.telegrambot.handler;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.pankov.common.NotificationDTO;
+import ru.pankov.common.NotificationType;
 import ru.pankov.telegrambot.bot.Response;
 import ru.pankov.telegrambot.common.MessageType;
 
@@ -46,12 +47,31 @@ public class Handler {
         return "Отлично, давай выберем дату дня рождения для " + name;
     }
 
+    protected static String getAddEventNameText() {
+        return "Введите название события";
+    }
+
+    protected static String getAddEventDateText(String name) {
+        return "Отлично, давай выберем дату для события: " + name;
+    }
+
+    protected static String getAddEventHoursText() {
+        return "Выбери час уведомления";
+    }
+
+    protected static String getAddEventMinutesText() {
+        return "Выбери время уведомления";
+    }
+
     protected static String getGetText(List<NotificationDTO> notifications) {
         if (!notifications.isEmpty()) {
             return ("Список твоих уведомлений:" + System.lineSeparator() + System.lineSeparator() +
                     notifications.stream()
                             .sorted(Comparator.comparing(NotificationDTO::getDate))
-                            .map(n -> "#" + n.getId() + ": " + n.getType().getValue() + " - " + n.getText() + " - " + n.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")))
+                            .map(n ->   "(#" + n.getId() + ") " +
+                                        n.getType().getValue() + " - " +
+                                        n.getDate().format(DateTimeFormatter.ofPattern(n.getType() == NotificationType.BIRTHDAY ? "dd.MM.yyyy" : "dd.MM.yyyy HH:mm")) + " - " +
+                                        n.getText())
                             .collect(Collectors.joining(System.lineSeparator())));
         } else {
             return "Список уведомлений пуст";
@@ -66,7 +86,7 @@ public class Handler {
         return "Уведомление успешно удалено";
     }
 
-    protected static String getCreateBirthdayText() {
+    protected static String getCreateText() {
         return "Уведомление успешно добавлено";
     }
 
