@@ -6,7 +6,7 @@ import ru.pankov.common.NotificationParams;
 import ru.pankov.common.NotificationType;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -23,7 +23,7 @@ public class NotificationEntity {
     private Long chatId;
 
     @Column(name = "date")
-    private LocalDate date;
+    private LocalDateTime date;
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "notification_type")
@@ -39,11 +39,25 @@ public class NotificationEntity {
     private Boolean sent;
 
     public NotificationEntity(NotificationParams params) {
+        if (params.getType() == NotificationType.BIRTHDAY) {
+            params.setDate(params.getDate().withHour(10).withMinute(0).withSecond(0));
+        }
         this.chatId = params.getChatId();
         this.date = params.getDate();
         this.notificationType = params.getType();
         this.text = params.getText();
         this.isAdvance = false;
         this.sent = false;
+    }
+
+    public static NotificationEntity getPreparedBirthday(NotificationEntity entity) {
+        NotificationEntity n = new NotificationEntity();
+        n.chatId = entity.getChatId();
+        n.date = entity.getDate().minusDays(3);
+        n.notificationType = entity.getNotificationType();
+        n.text = entity.getText();
+        n.isAdvance = true;
+        n.sent = false;
+        return n;
     }
 }

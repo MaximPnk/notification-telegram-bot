@@ -13,4 +13,5 @@ public interface NotificationService {
 
     void deleteById(Long id);
 
+    void saveAdvanceBirthday(AddAdvanceBirthdayNotify event);
 }

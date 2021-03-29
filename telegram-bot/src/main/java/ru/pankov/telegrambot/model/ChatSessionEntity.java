@@ -7,7 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import ru.pankov.telegrambot.common.UserSessionStage;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "chat_session")
@@ -28,7 +28,7 @@ public class ChatSessionEntity {
 
     @Column(name = "tmp_bd_date")
     @CreationTimestamp
-    private LocalDate tmpBDDate;
+    private LocalDateTime tmpBDDate;
 
     @Column(name = "tmp_notification_id")
     private Long tmpNotificationId;

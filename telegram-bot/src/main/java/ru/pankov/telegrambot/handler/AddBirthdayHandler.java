@@ -8,7 +8,7 @@ import ru.pankov.telegrambot.common.MessageType;
 import ru.pankov.telegrambot.model.ChatSessionEntity;
 
 import java.time.DateTimeException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Slf4j
 public class AddBirthdayHandler extends Handler {
@@ -38,8 +38,8 @@ public class AddBirthdayHandler extends Handler {
 
         switch (requestMessage.getText()) {
             case "<< Пред":
-                LocalDate prev = chatSessionEntity.getTmpBDDate().minusMonths(1).withDayOfMonth(1);
-                chatSessionEntity.setTmpBDDate(prev.compareTo(LocalDate.now()) < 0 ? LocalDate.now() : prev);
+                LocalDateTime prev = chatSessionEntity.getTmpBDDate().minusMonths(1).withDayOfMonth(1);
+                chatSessionEntity.setTmpBDDate(prev.compareTo(LocalDateTime.now()) < 0 ? LocalDateTime.now() : prev);
                 responseMessage.setText("Назад");
                 response.setMessageType(MessageType.ADD_BIRTHDAY_DATE);
                 break;
@@ -51,7 +51,7 @@ public class AddBirthdayHandler extends Handler {
             default:
                 try {
                     int day = Integer.parseInt(requestMessage.getText());
-                    LocalDate bd = chatSessionEntity.getTmpBDDate().withDayOfMonth(day);
+                    LocalDateTime bd = chatSessionEntity.getTmpBDDate().withDayOfMonth(day);
                     chatSessionEntity.setTmpBDDate(bd);
                 } catch (NumberFormatException | DateTimeException e) {
                     responseMessage.setText("Неверно указана дата");

@@ -11,7 +11,7 @@ spring:
     password: ${h2.password}
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
-    show-sql: true
+    show-sql: false
   h2:
     console:
       enabled: true

@@ -18,7 +18,7 @@ import ru.pankov.telegrambot.handler.*;
 import ru.pankov.telegrambot.model.ChatSessionEntity;
 import ru.pankov.telegrambot.service.ChatSessionService;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * TODO
@@ -26,7 +26,7 @@ import java.time.LocalDate;
  * TODO
  * реализовать добавление событий
  * TODO
- * если др, то добавлять сразу в базу подготовительное уведомление
+ * если др, то триггером добавлять сразу в базу подготовительное уведомление (listener)
  * TODO
  * Микросервис с основной БД должен периодически проверять даты (scheduler)
  * В случае успеха добавляет в кафку мсг с инфой по чату и инфе о данном уведомлении
@@ -79,7 +79,7 @@ public class Bot extends TelegramLongPollingBot {
                 case ADD_BIRTHDAY_DATE_STAGE:
                     response = AddBirthdayHandler.handleDate(requestMessage, responseMessage, chatSession);
                     if (response.getMessageType() != MessageType.ADD_BIRTHDAY_DATE && response.getMessageType() != MessageType.CREATE_BIRTHDAY) {
-                        chatSession.setTmpBDDate(LocalDate.now());
+                        chatSession.setTmpBDDate(LocalDateTime.now());
                     }
                     break;
                 case GET_STAGE:
@@ -118,7 +118,7 @@ public class Bot extends TelegramLongPollingBot {
                     notificationController.create(new NotificationParams(chatId, chatSession.getTmpBDDate(), NotificationType.BIRTHDAY, chatSession.getTmpBDName()));
                     KeyboardChanger.setMainMenuButtons(responseMessage);
                     chatSession.setUserSessionStage(UserSessionStage.MAIN_STAGE);
-                    chatSession.setTmpBDDate(LocalDate.now());
+                    chatSession.setTmpBDDate(LocalDateTime.now());
                     break;
                 case GET:
                     KeyboardChanger.setGetButtons(responseMessage);

@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRem
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import ru.pankov.common.NotificationDTO;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,14 +35,14 @@ public class KeyboardChanger {
         markup.setKeyboard(keyboardRows);
     }
 
-    public static void setDateButtons(SendMessage responseMessage, LocalDate init) {
+    public static void setDateButtons(SendMessage responseMessage, LocalDateTime init) {
         ReplyKeyboardMarkup markup = addButtons(responseMessage);
-        LocalDate end = init.withDayOfMonth(init.lengthOfMonth());
-        int numberOfWeeks = (int) Math.ceil((double) (init.lengthOfMonth() - init.getDayOfMonth() + init.getDayOfWeek().getValue()) / 7);
+        LocalDateTime end = init.withDayOfMonth(init.toLocalDate().lengthOfMonth());
+        int numberOfWeeks = (int) Math.ceil((double) (init.toLocalDate().lengthOfMonth() - init.getDayOfMonth() + init.getDayOfWeek().getValue()) / 7);
 
         List<KeyboardRow> keyboardRows = new ArrayList<>();
         keyboardRows.add(new KeyboardRow() {{
-            add(init.getMonth().getValue() <= LocalDate.now().getMonth().getValue() && init.getYear() <= LocalDate.now().getYear() ? " " : "<< Пред");
+            add(init.getMonth().getValue() <= LocalDateTime.now().getMonth().getValue() && init.getYear() <= LocalDateTime.now().getYear() ? " " : "<< Пред");
             add(monthNames[init.getMonth().getValue() - 1] + " " + init.getYear());
             add("След >>");
         }});

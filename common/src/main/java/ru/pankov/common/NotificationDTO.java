@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -12,6 +12,6 @@ import java.time.LocalDate;
 public class NotificationDTO {
     Long id;
     NotificationType type;
-    LocalDate date;
+    LocalDateTime date;
     String text;
 }
