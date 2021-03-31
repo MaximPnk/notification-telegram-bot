@@ -25,7 +25,7 @@ public class NotificationController {
     }
 
     public List<NotificationDTO> getByChatId(Long chatId) {
-        return mapper.convertValue(notificationClient.getByChatId(chatId).getBody().getMessage(), new TypeReference<>() {});
+        return mapper.convertValue(notificationClient.getByChatId(chatId).getBody().getMessage(), new TypeReference<List<NotificationDTO>>() {});
     }
 
     public void create(NotificationParams params) {

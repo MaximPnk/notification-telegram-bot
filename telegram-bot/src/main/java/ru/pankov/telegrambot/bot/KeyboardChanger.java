@@ -22,7 +22,7 @@ public class KeyboardChanger {
 
     public static void setMainMenuButtons(SendMessage responseMessage) {
         ReplyKeyboardMarkup markup = addButtons(responseMessage);
-        List<KeyboardRow> keyboardRows = new ArrayList<>() {{
+        List<KeyboardRow> keyboardRows = new ArrayList<KeyboardRow>() {{
             add(new KeyboardRow() {{ add("Добавить уведомление ☑️"); }});
             add(new KeyboardRow() {{ add("Список моих уведомлений \uD83D\uDCD9"); }});
             add(new KeyboardRow() {{ add("Помощь ⁉️"); }});
@@ -32,7 +32,7 @@ public class KeyboardChanger {
 
     public static void setAddMenuButtons(SendMessage responseMessage) {
         ReplyKeyboardMarkup markup = addButtons(responseMessage);
-        List<KeyboardRow> keyboardRows = new ArrayList<>() {{
+        List<KeyboardRow> keyboardRows = new ArrayList<KeyboardRow>() {{
             add(new KeyboardRow() {{ add("День рождения \uD83C\uDF89"); add("Событие ✅"); }});
             add(new KeyboardRow() {{ add("Вернуться ↩️"); }});
         }};
@@ -80,7 +80,7 @@ public class KeyboardChanger {
 
     public static void setMinutesButtons(SendMessage responseMessage, ChatSessionEntity entity) {
         ReplyKeyboardMarkup markup = addButtons(responseMessage);
-        List<KeyboardRow> keyboardRows = new ArrayList<>() {{
+        List<KeyboardRow> keyboardRows = new ArrayList<KeyboardRow>() {{
             add(new KeyboardRow() {{ add(entity.getTmpBDDate().getHour() + ":" + minutes[0]); add(entity.getTmpBDDate().getHour() + ":" + minutes[1]); }});
             add(new KeyboardRow() {{ add(entity.getTmpBDDate().getHour() + ":" + minutes[2]); add(entity.getTmpBDDate().getHour() + ":" + minutes[3]); }});
         }};
@@ -89,7 +89,7 @@ public class KeyboardChanger {
 
     public static void setGetButtons(SendMessage responseMessage) {
         ReplyKeyboardMarkup markup = addButtons(responseMessage);
-        List<KeyboardRow> keyboardRows = new ArrayList<>() {{
+        List<KeyboardRow> keyboardRows = new ArrayList<KeyboardRow>() {{
             add(new KeyboardRow() {{ add("Удалить по номеру ✖️"); }});
             add(new KeyboardRow() {{ add("Вернуться ↩️"); }});
         }};
@@ -112,7 +112,7 @@ public class KeyboardChanger {
 
     public static void setDeleteConfirmButtons(SendMessage responseMessage) {
         ReplyKeyboardMarkup markup = addButtons(responseMessage);
-        List<KeyboardRow> keyboardRows = new ArrayList<>() {{ add(new KeyboardRow() {{ add("Да ✅"); add("Нет ❌"); }}); }};
+        List<KeyboardRow> keyboardRows = new ArrayList<KeyboardRow>() {{ add(new KeyboardRow() {{ add("Да ✅"); add("Нет ❌"); }}); }};
         markup.setKeyboard(keyboardRows);
     }
 
