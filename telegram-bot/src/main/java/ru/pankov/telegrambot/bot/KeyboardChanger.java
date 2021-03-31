@@ -23,9 +23,9 @@ public class KeyboardChanger {
     public static void setMainMenuButtons(SendMessage responseMessage) {
         ReplyKeyboardMarkup markup = addButtons(responseMessage);
         List<KeyboardRow> keyboardRows = new ArrayList<>() {{
-            add(new KeyboardRow() {{ add("Добавить уведомление✔️"); }});
-            add(new KeyboardRow() {{ add("Список моих уведомлений✔️"); }});
-            add(new KeyboardRow() {{ add("Помощь✔️"); }});
+            add(new KeyboardRow() {{ add("Добавить уведомление ☑️"); }});
+            add(new KeyboardRow() {{ add("Список моих уведомлений \uD83D\uDCD9"); }});
+            add(new KeyboardRow() {{ add("Помощь ⁉️"); }});
         }};
         markup.setKeyboard(keyboardRows);
     }
@@ -33,8 +33,8 @@ public class KeyboardChanger {
     public static void setAddMenuButtons(SendMessage responseMessage) {
         ReplyKeyboardMarkup markup = addButtons(responseMessage);
         List<KeyboardRow> keyboardRows = new ArrayList<>() {{
-            add(new KeyboardRow() {{ add("День рождения✔️"); add("Событие✔️"); }});
-            add(new KeyboardRow() {{ add("Вернуться✔️"); }});
+            add(new KeyboardRow() {{ add("День рождения \uD83C\uDF89"); add("Событие ✅"); }});
+            add(new KeyboardRow() {{ add("Вернуться ↩️"); }});
         }};
         markup.setKeyboard(keyboardRows);
     }
@@ -46,9 +46,9 @@ public class KeyboardChanger {
 
         List<KeyboardRow> keyboardRows = new ArrayList<>();
         keyboardRows.add(new KeyboardRow() {{
-            add(init.getMonth().getValue() <= LocalDateTime.now().getMonth().getValue() && init.getYear() <= LocalDateTime.now().getYear() ? " " : "<< Пред");
+            add(init.getMonth().getValue() <= LocalDateTime.now().getMonth().getValue() && init.getYear() <= LocalDateTime.now().getYear() ? " " : "⏪ Пред");
             add(monthNames[init.getMonth().getValue() - 1] + " " + init.getYear());
-            add("След >>");
+            add("След ⏩");
         }});
 //        keyboardRows.add(new KeyboardRow() {{ add("Пн"); add("Вт"); add("Ср"); add("Чт"); add("Пт"); add("Сб"); add("Вс"); }});
 //        в 4 местах логика i+1 вместо i
@@ -90,8 +90,8 @@ public class KeyboardChanger {
     public static void setGetButtons(SendMessage responseMessage) {
         ReplyKeyboardMarkup markup = addButtons(responseMessage);
         List<KeyboardRow> keyboardRows = new ArrayList<>() {{
-            add(new KeyboardRow() {{ add("Удалить по номеру✔️"); }});
-            add(new KeyboardRow() {{ add("Вернуться✔️"); }});
+            add(new KeyboardRow() {{ add("Удалить по номеру ✖️"); }});
+            add(new KeyboardRow() {{ add("Вернуться ↩️"); }});
         }};
         markup.setKeyboard(keyboardRows);
     }
@@ -106,13 +106,13 @@ public class KeyboardChanger {
                 keyboardRows.get(i).add(String.valueOf(notifications.get(k++).getId()));
             }
         }
-        keyboardRows.add(new KeyboardRow() {{ add("Вернуться✔️"); }});
+        keyboardRows.add(new KeyboardRow() {{ add("Вернуться ↩️"); }});
         markup.setKeyboard(keyboardRows);
     }
 
     public static void setDeleteConfirmButtons(SendMessage responseMessage) {
         ReplyKeyboardMarkup markup = addButtons(responseMessage);
-        List<KeyboardRow> keyboardRows = new ArrayList<>() {{ add(new KeyboardRow() {{ add("Да✔️"); add("Нет✔️"); }}); }};
+        List<KeyboardRow> keyboardRows = new ArrayList<>() {{ add(new KeyboardRow() {{ add("Да ✅"); add("Нет ❌"); }}); }};
         markup.setKeyboard(keyboardRows);
     }
 

@@ -16,15 +16,15 @@ public class AddHandler extends Handler {
         }
 
         switch (requestMessage.getText()) {
-            case "День рождения✔️":
+            case "День рождения \uD83C\uDF89":
                 responseMessage.setText(getAddBirthdayNameText());
                 response.setMessageType(MessageType.ADD_BIRTHDAY_NAME);
                 break;
-            case "Событие✔️":
+            case "Событие ✅":
                 responseMessage.setText(getAddEventNameText());
                 response.setMessageType(MessageType.ADD_EVENT_NAME);
                 break;
-            case "Вернуться✔️":
+            case "Вернуться ↩️":
                 responseMessage.setText(getReturnText());
                 response.setMessageType(MessageType.RETURN);
                 break;

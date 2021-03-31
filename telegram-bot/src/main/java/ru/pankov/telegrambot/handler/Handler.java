@@ -36,7 +36,7 @@ public class Handler {
 
     protected static String getAddText() {
         return "Приступим к созданию нового уведомления." + System.lineSeparator() + System.lineSeparator() +
-                "Пожалуйста, выбери из списка интересующую категорию.";
+                "Выбери из списка интересующую категорию.";
     }
 
     protected static String getAddBirthdayNameText() {
@@ -48,7 +48,7 @@ public class Handler {
     }
 
     protected static String getAddEventNameText() {
-        return "Введите название события";
+        return "Введи название события";
     }
 
     protected static String getAddEventDateText(String name) {
@@ -63,14 +63,18 @@ public class Handler {
         return "Выбери время уведомления";
     }
 
-    protected static String getGetText(List<NotificationDTO> notifications) {
+    protected static String getDeleteText(List<NotificationDTO> notifications) {
         if (!notifications.isEmpty()) {
-            return ("Список твоих уведомлений:" + System.lineSeparator() + System.lineSeparator() +
-                    notifications.stream()
-                            .sorted(Comparator.comparing(NotificationDTO::getDate))
+            return ("Дни рождения \uD83E\uDD73" + System.lineSeparator() +
+                    notifications.stream().filter(n -> n.getType() == NotificationType.BIRTHDAY).sorted(Comparator.comparing(NotificationDTO::getDate))
                             .map(n ->   "(#" + n.getId() + ") " +
-                                        n.getType().getValue() + " - " +
-                                        n.getDate().format(DateTimeFormatter.ofPattern(n.getType() == NotificationType.BIRTHDAY ? "dd.MM.yyyy" : "dd.MM.yyyy HH:mm")) + " - " +
+                                        n.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + " - " +
+                                        n.getText())
+                            .collect(Collectors.joining(System.lineSeparator())) + System.lineSeparator() + System.lineSeparator() +
+                    "События ✅" + System.lineSeparator() +
+                    notifications.stream().filter(n -> n.getType() == NotificationType.EVENT).sorted(Comparator.comparing(NotificationDTO::getDate))
+                            .map(n ->   "(#" + n.getId() + ") " +
+                                        n.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")) + " - " +
                                         n.getText())
                             .collect(Collectors.joining(System.lineSeparator())));
         } else {
@@ -78,8 +82,21 @@ public class Handler {
         }
     }
 
-    protected static String getDeleteText() {
-        return "Укажите номер уведомления, которое вы хотели бы удалить";
+    protected static String getGetText(List<NotificationDTO> notifications) {
+        if (!notifications.isEmpty()) {
+            return ("Дни рождения \uD83E\uDD73" + System.lineSeparator() +
+                    notifications.stream().filter(n -> n.getType() == NotificationType.BIRTHDAY).sorted(Comparator.comparing(NotificationDTO::getDate))
+                            .map(n ->   n.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + " - " +
+                                        n.getText())
+                            .collect(Collectors.joining(System.lineSeparator())) + System.lineSeparator() + System.lineSeparator() +
+                    "События ✅" + System.lineSeparator() +
+                    notifications.stream().filter(n -> n.getType() == NotificationType.EVENT).sorted(Comparator.comparing(NotificationDTO::getDate))
+                            .map(n ->   n.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")) + " - " +
+                                        n.getText())
+                            .collect(Collectors.joining(System.lineSeparator())));
+        } else {
+            return "Список уведомлений пуст";
+        }
     }
 
     protected static String getDeleteSuccessText() {
@@ -97,14 +114,14 @@ public class Handler {
     }
 
     protected static String getHelpText() {
-        return "Для управления ботом необходимо использовать кнопки, которые заменяют клавиатуру." + System.lineSeparator() +
-                "Если произошла ошибка, вы всегда можете воспользоваться командой /return для возврата в главное меню" + System.lineSeparator() +
-                "В случае возникновения вопросов можно обратиться @your_notify_bot";
+        return "Для управления ботом необходимо использовать кнопки, которые заменяют клавиатуру." + System.lineSeparator() + System.lineSeparator() +
+                "/return - возврат в главное меню" + System.lineSeparator() + System.lineSeparator() +
+                "Вопросы: @your_notify_bot";
     }
 
     protected static String getUnsupportedText() {
-        return "Пожалуйста, выберите команду из списка" + System.lineSeparator() +
-                "/help - для получения справочной информации";
+        return "Пожалуйста, выбери команду из списка" + System.lineSeparator() + System.lineSeparator() +
+                "/help - справочная информация";
     }
 
     protected static String getReturnText() {

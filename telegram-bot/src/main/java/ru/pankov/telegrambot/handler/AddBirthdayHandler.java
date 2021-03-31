@@ -37,13 +37,13 @@ public class AddBirthdayHandler extends Handler {
         }
 
         switch (requestMessage.getText()) {
-            case "<< Пред":
+            case "⏪ Пред":
                 LocalDateTime prev = chatSessionEntity.getTmpBDDate().minusMonths(1).withDayOfMonth(1);
                 chatSessionEntity.setTmpBDDate(prev.compareTo(LocalDateTime.now()) < 0 ? LocalDateTime.now() : prev);
                 responseMessage.setText("Назад");
                 response.setMessageType(MessageType.ADD_BIRTHDAY_DATE);
                 break;
-            case "След >>":
+            case "След ⏩":
                 chatSessionEntity.setTmpBDDate(chatSessionEntity.getTmpBDDate().plusMonths(1).withDayOfMonth(1));
                 responseMessage.setText("Вперёд");
                 response.setMessageType(MessageType.ADD_BIRTHDAY_DATE);

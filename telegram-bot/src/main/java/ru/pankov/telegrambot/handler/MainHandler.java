@@ -21,19 +21,19 @@ public class MainHandler extends Handler {
         }
 
         switch (requestMessage.getText()) {
-            case "Добавить уведомление✔️":
+            case "Добавить уведомление ☑️":
                 responseMessage.setText(getAddText());
                 response.setMessageType(MessageType.ADD);
                 break;
-            case "Список моих уведомлений✔️":
+            case "Список моих уведомлений \uD83D\uDCD9":
                 responseMessage.setText(getGetText(notifications));
                 response.setMessageType(MessageType.GET);
                 break;
-            case "Помощь✔️":
+            case "Помощь ⁉️":
                 responseMessage.setText(getHelpText());
                 response.setMessageType(MessageType.HELP);
                 break;
-            case "Вернуться✔️":
+            case "Вернуться ↩️":
                 responseMessage.setText(getReturnText());
                 response.setMessageType(MessageType.RETURN);
                 break;

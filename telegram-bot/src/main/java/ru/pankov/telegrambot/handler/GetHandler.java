@@ -2,12 +2,15 @@ package ru.pankov.telegrambot.handler;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import ru.pankov.common.NotificationDTO;
 import ru.pankov.telegrambot.bot.Response;
 import ru.pankov.telegrambot.common.MessageType;
 
+import java.util.List;
+
 public class GetHandler extends Handler {
 
-    public static Response handle(Message requestMessage, SendMessage responseMessage) {
+    public static Response handle(Message requestMessage, SendMessage responseMessage, List<NotificationDTO> notifications) {
 
         Response response = new Response();
         handleCommands(requestMessage, responseMessage, response);
@@ -16,11 +19,11 @@ public class GetHandler extends Handler {
         }
 
         switch (requestMessage.getText()) {
-            case "Удалить по номеру✔️":
-                responseMessage.setText(getDeleteText());
+            case "Удалить по номеру ✖️":
+                responseMessage.setText(getDeleteText(notifications));
                 response.setMessageType(MessageType.DELETE_LIST);
                 break;
-            case "Вернуться✔️":
+            case "Вернуться ↩️":
                 responseMessage.setText(getReturnText());
                 response.setMessageType(MessageType.RETURN);
                 break;

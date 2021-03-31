@@ -21,7 +21,7 @@ public class DeleteHandler extends Handler {
             return response;
         }
 
-        if (requestMessage.getText().equals("Вернуться✔️")) {
+        if (requestMessage.getText().equals("Вернуться ↩️")) {
             responseMessage.setText(getReturnText());
             response.setMessageType(MessageType.RETURN);
             return response;
@@ -53,11 +53,11 @@ public class DeleteHandler extends Handler {
         }
 
         switch (requestMessage.getText()) {
-            case "Да✔️":
+            case "Да ✅":
                 responseMessage.setText(getDeleteSuccessText());
                 response.setMessageType(MessageType.DELETE);
                 break;
-            case "Нет✔️":
+            case "Нет ❌":
                 responseMessage.setText(getGetText(notifications));
                 response.setMessageType(MessageType.GET);
                 break;

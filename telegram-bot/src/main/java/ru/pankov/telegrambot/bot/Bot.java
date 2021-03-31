@@ -22,13 +22,15 @@ import java.time.LocalDateTime;
 
 /**
  * TODO
- * разнести Bot по методам
- * TODO
- * реализовать добавление событий
- * TODO
  * Микросервис с основной БД должен периодически проверять даты (scheduler)
  * В случае успеха добавляет в кафку мсг с инфой по чату и инфе о данном уведомлении
  * В свою очередь бот чекает инфу из кафки и при получении шлёт сообщение
+ * TODO
+ * затестить в контейнерах
+ * TODO
+ * затестить в клауде
+ * TODO
+ * реализовать ci/cd
  */
 
 @Component
@@ -102,7 +104,7 @@ public class Bot extends TelegramLongPollingBot {
                     }
                     break;
                 case GET_STAGE:
-                    response = GetHandler.handle(requestMessage, responseMessage);
+                    response = GetHandler.handle(requestMessage, responseMessage, notificationController.getByChatId(chatId));
                     break;
                 case DELETE_LIST_STAGE:
                     response = DeleteHandler.handleList(requestMessage, responseMessage, notificationController.getByChatId(chatId), chatSession);
