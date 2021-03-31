@@ -22,7 +22,7 @@ public class AddBirthdayHandler extends Handler {
         }
 
         chatSessionEntity.setTmpBDName(requestMessage.getText());
-        responseMessage.setText(getAddBirthdayDateText(requestMessage.getText()));
+        responseMessage.setText(ResponseTextGenerator.getAddBirthdayDateText(requestMessage.getText()));
         response.setMessageType(MessageType.ADD_BIRTHDAY_DATE);
         response.setMessage(responseMessage);
         return response;
@@ -58,7 +58,7 @@ public class AddBirthdayHandler extends Handler {
                     response.setMessageType(MessageType.ADD_BIRTHDAY_DATE);
                     return response;
                 }
-                responseMessage.setText(getCreateText());
+                responseMessage.setText(ResponseTextGenerator.getCreateText());
                 response.setMessageType(MessageType.CREATE_BIRTHDAY);
         }
         return response;

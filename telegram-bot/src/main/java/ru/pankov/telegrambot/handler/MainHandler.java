@@ -22,23 +22,23 @@ public class MainHandler extends Handler {
 
         switch (requestMessage.getText()) {
             case "Добавить уведомление ☑️":
-                responseMessage.setText(getAddText());
+                responseMessage.setText(ResponseTextGenerator.getAddText());
                 response.setMessageType(MessageType.ADD);
                 break;
             case "Список моих уведомлений \uD83D\uDCD9":
-                responseMessage.setText(getGetText(notifications));
+                responseMessage.setText(ResponseTextGenerator.getGetText(notifications));
                 response.setMessageType(MessageType.GET);
                 break;
             case "Помощь ⁉️":
-                responseMessage.setText(getHelpText());
+                responseMessage.setText(ResponseTextGenerator.getHelpText());
                 response.setMessageType(MessageType.HELP);
                 break;
             case "Вернуться ↩️":
-                responseMessage.setText(getReturnText());
+                responseMessage.setText(ResponseTextGenerator.getReturnText());
                 response.setMessageType(MessageType.RETURN);
                 break;
             default:
-                responseMessage.setText(getUnsupportedText());
+                responseMessage.setText(ResponseTextGenerator.getUnsupportedText());
                 response.setMessageType(MessageType.UNSUPPORTED);
         }
         response.setMessage(responseMessage);

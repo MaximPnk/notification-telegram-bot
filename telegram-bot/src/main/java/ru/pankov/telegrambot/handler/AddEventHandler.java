@@ -22,7 +22,7 @@ public class AddEventHandler extends Handler {
         }
 
         chatSessionEntity.setTmpBDName(requestMessage.getText());
-        responseMessage.setText(getAddEventDateText(requestMessage.getText()));
+        responseMessage.setText(ResponseTextGenerator.getAddEventDateText(requestMessage.getText()));
         response.setMessageType(MessageType.ADD_EVENT_DATE);
         response.setMessage(responseMessage);
         return response;
@@ -58,7 +58,7 @@ public class AddEventHandler extends Handler {
                     response.setMessageType(MessageType.ADD_EVENT_DATE);
                     return response;
                 }
-                responseMessage.setText(getAddEventHoursText());
+                responseMessage.setText(ResponseTextGenerator.getAddEventHoursText());
                 response.setMessageType(MessageType.ADD_EVENT_HOURS);
         }
         return response;
@@ -81,7 +81,7 @@ public class AddEventHandler extends Handler {
             response.setMessageType(MessageType.ADD_EVENT_HOURS);
             return response;
         }
-        responseMessage.setText(getAddEventMinutesText());
+        responseMessage.setText(ResponseTextGenerator.getAddEventMinutesText());
         response.setMessageType(MessageType.ADD_EVENT_MINUTES);
 
         return response;
@@ -104,7 +104,7 @@ public class AddEventHandler extends Handler {
             response.setMessageType(MessageType.ADD_EVENT_MINUTES);
             return response;
         }
-        responseMessage.setText(getCreateText());
+        responseMessage.setText(ResponseTextGenerator.getCreateText());
         response.setMessageType(MessageType.CREATE_EVENT);
 
         return response;

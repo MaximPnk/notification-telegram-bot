@@ -17,19 +17,19 @@ public class AddHandler extends Handler {
 
         switch (requestMessage.getText()) {
             case "День рождения \uD83C\uDF89":
-                responseMessage.setText(getAddBirthdayNameText());
+                responseMessage.setText(ResponseTextGenerator.getAddBirthdayNameText());
                 response.setMessageType(MessageType.ADD_BIRTHDAY_NAME);
                 break;
             case "Событие ✅":
-                responseMessage.setText(getAddEventNameText());
+                responseMessage.setText(ResponseTextGenerator.getAddEventNameText());
                 response.setMessageType(MessageType.ADD_EVENT_NAME);
                 break;
             case "Вернуться ↩️":
-                responseMessage.setText(getReturnText());
+                responseMessage.setText(ResponseTextGenerator.getReturnText());
                 response.setMessageType(MessageType.RETURN);
                 break;
             default:
-                responseMessage.setText(getUnsupportedText());
+                responseMessage.setText(ResponseTextGenerator.getUnsupportedText());
                 response.setMessageType(MessageType.UNSUPPORTED);
         }
         response.setMessage(responseMessage);

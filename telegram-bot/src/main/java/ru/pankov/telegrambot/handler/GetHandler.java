@@ -20,15 +20,15 @@ public class GetHandler extends Handler {
 
         switch (requestMessage.getText()) {
             case "Удалить по номеру ✖️":
-                responseMessage.setText(getDeleteText(notifications));
+                responseMessage.setText(ResponseTextGenerator.getDeleteText(notifications));
                 response.setMessageType(MessageType.DELETE_LIST);
                 break;
             case "Вернуться ↩️":
-                responseMessage.setText(getReturnText());
+                responseMessage.setText(ResponseTextGenerator.getReturnText());
                 response.setMessageType(MessageType.RETURN);
                 break;
             default:
-                responseMessage.setText(getUnsupportedText());
+                responseMessage.setText(ResponseTextGenerator.getUnsupportedText());
                 response.setMessageType(MessageType.UNSUPPORTED);
         }
         response.setMessage(responseMessage);
