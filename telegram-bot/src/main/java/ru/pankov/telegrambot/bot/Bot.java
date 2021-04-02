@@ -184,7 +184,7 @@ public class Bot extends TelegramLongPollingBot {
                 chatSession.setUserSessionStage(UserSessionStage.ADD_EVENT_DATE_STAGE);
                 break;
             case ADD_EVENT_HOURS:
-                KeyboardChanger.setHoursButtons(responseMessage);
+                KeyboardChanger.setHoursButtons(responseMessage, chatSession);
                 chatSession.setUserSessionStage(UserSessionStage.ADD_EVENT_HOURS_STAGE);
                 break;
             case ADD_EVENT_MINUTES:

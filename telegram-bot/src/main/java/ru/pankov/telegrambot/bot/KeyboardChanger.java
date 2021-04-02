@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import ru.pankov.common.NotificationDTO;
 import ru.pankov.telegrambot.model.ChatSessionEntity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,13 +67,22 @@ public class KeyboardChanger {
         markup.setKeyboard(keyboardRows);
     }
 
-    public static void setHoursButtons(SendMessage responseMessage) {
+    public static void setHoursButtons(SendMessage responseMessage, ChatSessionEntity entity) {
         ReplyKeyboardMarkup markup = addButtons(responseMessage);
         List<KeyboardRow> keyboardRows = new ArrayList<>();
-        for (int i = 0, k = 0; i < 4; i++) {
+        LocalDateTime eventDate = entity.getTmpBDDate();
+        int hour = 0;
+        if (eventDate.toLocalDate().equals(LocalDate.now())) {
+            hour = LocalDateTime.now().getHour();
+            if (eventDate.getMinute() > 45) {
+                hour++;
+            }
+        }
+        for (int i = 0; i < 4; i++) {
             keyboardRows.add(new KeyboardRow());
-            for (int j = 0; j < 6; j++) {
-                keyboardRows.get(i).add(hours[k++]);
+            for (int j = 0; hour < 24; j++) {
+                System.out.println(hour);
+                keyboardRows.get(i).add(hours[hour++]);
             }
         }
         markup.setKeyboard(keyboardRows);
@@ -80,10 +90,22 @@ public class KeyboardChanger {
 
     public static void setMinutesButtons(SendMessage responseMessage, ChatSessionEntity entity) {
         ReplyKeyboardMarkup markup = addButtons(responseMessage);
+        LocalDateTime eventDate = entity.getTmpBDDate();
         List<KeyboardRow> keyboardRows = new ArrayList<KeyboardRow>() {{
             add(new KeyboardRow() {{ add(entity.getTmpBDDate().getHour() + ":" + minutes[0]); add(entity.getTmpBDDate().getHour() + ":" + minutes[1]); }});
             add(new KeyboardRow() {{ add(entity.getTmpBDDate().getHour() + ":" + minutes[2]); add(entity.getTmpBDDate().getHour() + ":" + minutes[3]); }});
         }};
+        if (eventDate.toLocalDate().equals(LocalDate.now()) && eventDate.getHour() == LocalDateTime.now().getHour()) {
+            if (LocalDateTime.now().getMinute() > 15) {
+                keyboardRows.get(0).remove(0);
+            }
+            if (LocalDateTime.now().getMinute() > 30) {
+                keyboardRows.remove(0);
+            }
+            if (LocalDateTime.now().getMinute() > 45) {
+                keyboardRows.get(0).remove(0);
+            }
+        }
         markup.setKeyboard(keyboardRows);
     }
 

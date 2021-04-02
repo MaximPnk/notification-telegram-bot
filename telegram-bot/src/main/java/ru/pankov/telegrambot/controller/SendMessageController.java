@@ -11,10 +11,7 @@ import ru.pankov.common.NotificationDTO;
 @RestController
 @RequestMapping("/send")
 @Slf4j
-@RequiredArgsConstructor
 public class SendMessageController {
-
-    private final BCryptPasswordEncoder encoder;
 
     @Value("${rest.token}")
     String token;
