@@ -14,13 +14,13 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class NotificationService {
+public class NotificationServiceService {
 
-    private final NotificationClient notificationClient;
+    private final NotificationServiceClient notificationServiceClient;
     private ObjectMapper mapper;
 
-    @Value("${rest.token}")
-    String token;
+    @Value("${rest.encoded.token}")
+    String encodedToken;
 
     @PostConstruct
     private void init() {
@@ -29,15 +29,15 @@ public class NotificationService {
     }
 
     public List<NotificationDTO> getByChatId(Long chatId) {
-        return mapper.convertValue(notificationClient.getByChatId(chatId, token).getBody().getMessage(), new TypeReference<List<NotificationDTO>>() {});
+        return mapper.convertValue(notificationServiceClient.getByChatId(chatId, encodedToken).getBody().getMessage(), new TypeReference<List<NotificationDTO>>() {});
     }
 
     public void create(NotificationParams params) {
-        notificationClient.create(params, token);
+        notificationServiceClient.create(params, encodedToken);
     }
 
     public void deleteById(Long id) {
-        notificationClient.deleteById(id, token);
+        notificationServiceClient.deleteById(id, encodedToken);
     }
 
 }

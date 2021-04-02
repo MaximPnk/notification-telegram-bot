@@ -17,6 +17,8 @@ spring:
       enabled: true
       settings:
         web-allow-others: false
+  application:
+    name: telegram-bot
 
 eureka:
   client:

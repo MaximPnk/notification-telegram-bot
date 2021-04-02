@@ -8,14 +8,14 @@ import ru.pankov.common.NotificationParams;
 
 @FeignClient("notification-service")
 @RequestMapping("/notification-service/notification")
-public interface NotificationClient {
+public interface NotificationServiceClient {
 
-    @PostMapping("/{chatId}")
-    ResponseEntity<Header> getByChatId(@PathVariable Long chatId, @RequestParam String token);
+    @GetMapping("/{chatId}")
+    ResponseEntity<Header> getByChatId(@PathVariable Long chatId, @RequestHeader("auth") String token);
 
     @PostMapping("/")
-    ResponseEntity<Header> create(@RequestBody NotificationParams params, @RequestParam String token);
+    ResponseEntity<Header> create(@RequestBody NotificationParams params, @RequestHeader("auth") String token);
 
     @DeleteMapping("/{id}")
-    ResponseEntity<Header> deleteById(@PathVariable Long id, @RequestParam String token);
+    ResponseEntity<Header> deleteById(@PathVariable Long id, @RequestHeader("auth") String token);
 }

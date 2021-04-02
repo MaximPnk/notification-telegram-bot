@@ -13,7 +13,7 @@ import ru.pankov.common.NotificationParams;
 import ru.pankov.common.NotificationType;
 import ru.pankov.telegrambot.common.MessageType;
 import ru.pankov.telegrambot.common.UserSessionStage;
-import ru.pankov.telegrambot.service.NotificationService;
+import ru.pankov.telegrambot.service.NotificationServiceService;
 import ru.pankov.telegrambot.handler.*;
 import ru.pankov.telegrambot.model.ChatSessionEntity;
 import ru.pankov.telegrambot.service.ChatSessionService;
@@ -44,7 +44,7 @@ import java.time.LocalDateTime;
 public class Bot extends TelegramLongPollingBot {
 
     private final ChatSessionService chatSessionService;
-    private final NotificationService notificationService;
+    private final NotificationServiceService notificationServiceService;
 
     @Value("${bot.name}")
     String botUsername;
@@ -102,7 +102,7 @@ public class Bot extends TelegramLongPollingBot {
     private void handleMessage() {
         switch (userSessionStage) {
             case MAIN_STAGE:
-                response = MainHandler.handle(requestMessage, responseMessage, notificationService.getByChatId(chatId));
+                response = MainHandler.handle(requestMessage, responseMessage, notificationServiceService.getByChatId(chatId));
                 break;
             case ADD_STAGE:
                 response = AddHandler.handle(requestMessage, responseMessage);
@@ -138,13 +138,13 @@ public class Bot extends TelegramLongPollingBot {
                 }
                 break;
             case GET_STAGE:
-                response = GetHandler.handle(requestMessage, responseMessage, notificationService.getByChatId(chatId));
+                response = GetHandler.handle(requestMessage, responseMessage, notificationServiceService.getByChatId(chatId));
                 break;
             case DELETE_LIST_STAGE:
-                response = DeleteHandler.handleList(requestMessage, responseMessage, notificationService.getByChatId(chatId), chatSession);
+                response = DeleteHandler.handleList(requestMessage, responseMessage, notificationServiceService.getByChatId(chatId), chatSession);
                 break;
             case DELETE_CONFIRM_STAGE:
-                response = DeleteHandler.handleConfirm(requestMessage, responseMessage, notificationService.getByChatId(chatId));
+                response = DeleteHandler.handleConfirm(requestMessage, responseMessage, notificationServiceService.getByChatId(chatId));
                 break;
         }
     }
@@ -152,7 +152,7 @@ public class Bot extends TelegramLongPollingBot {
     private void changeState() {
         switch (response.getMessageType()) {
             case DELETE:
-                notificationService.deleteById(chatSession.getTmpNotificationId());
+                notificationServiceService.deleteById(chatSession.getTmpNotificationId());
             case START:
             case RETURN:
                 KeyboardChanger.setMainMenuButtons(responseMessage);
@@ -171,7 +171,7 @@ public class Bot extends TelegramLongPollingBot {
                 chatSession.setUserSessionStage(UserSessionStage.ADD_BIRTHDAY_DATE_STAGE);
                 break;
             case CREATE_BIRTHDAY:
-                notificationService.create(new NotificationParams(chatId, chatSession.getTmpBDDate(), NotificationType.BIRTHDAY, chatSession.getTmpBDName()));
+                notificationServiceService.create(new NotificationParams(chatId, chatSession.getTmpBDDate(), NotificationType.BIRTHDAY, chatSession.getTmpBDName()));
                 KeyboardChanger.setMainMenuButtons(responseMessage);
                 chatSession.setUserSessionStage(UserSessionStage.MAIN_STAGE);
                 chatSession.setTmpBDDate(LocalDateTime.now());
@@ -193,7 +193,7 @@ public class Bot extends TelegramLongPollingBot {
                 chatSession.setUserSessionStage(UserSessionStage.ADD_EVENT_MINUTES_STAGE);
                 break;
             case CREATE_EVENT:
-                notificationService.create(new NotificationParams(chatId, chatSession.getTmpBDDate(), NotificationType.EVENT, chatSession.getTmpBDName()));
+                notificationServiceService.create(new NotificationParams(chatId, chatSession.getTmpBDDate(), NotificationType.EVENT, chatSession.getTmpBDName()));
                 KeyboardChanger.setMainMenuButtons(responseMessage);
                 chatSession.setUserSessionStage(UserSessionStage.MAIN_STAGE);
                 chatSession.setTmpBDDate(LocalDateTime.now());
@@ -203,7 +203,7 @@ public class Bot extends TelegramLongPollingBot {
                 chatSession.setUserSessionStage(UserSessionStage.GET_STAGE);
                 break;
             case DELETE_LIST:
-                KeyboardChanger.setDeleteButtons(responseMessage, notificationService.getByChatId(chatId));
+                KeyboardChanger.setDeleteButtons(responseMessage, notificationServiceService.getByChatId(chatId));
                 chatSession.setUserSessionStage(UserSessionStage.DELETE_LIST_STAGE);
                 break;
             case DELETE_CONFIRM:

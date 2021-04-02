@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public enum NotificationType {
 
-    BIRTHDAY("ДР"), EVENT("Событие");
+    BIRTHDAY("ДР"), EVENT("Событие"), ADVANCE_BIRTHDAY;
 
     String value;
 }
