@@ -1,4 +1,4 @@
-package ru.pankov.telegrambot.controller;
+package ru.pankov.telegrambot.service;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -10,12 +10,12 @@ import ru.pankov.common.NotificationParams;
 @RequestMapping("/notification-service/notification")
 public interface NotificationClient {
 
-    @GetMapping("/{chatId}")
-    ResponseEntity<Header> getByChatId(@PathVariable Long chatId);
+    @PostMapping("/{chatId}")
+    ResponseEntity<Header> getByChatId(@PathVariable Long chatId, @RequestParam String token);
 
     @PostMapping("/")
-    ResponseEntity<Header> create(@RequestBody NotificationParams params);
+    ResponseEntity<Header> create(@RequestBody NotificationParams params, @RequestParam String token);
 
     @DeleteMapping("/{id}")
-    ResponseEntity<Header> deleteById(@PathVariable Long id);
+    ResponseEntity<Header> deleteById(@PathVariable Long id, @RequestParam String token);
 }

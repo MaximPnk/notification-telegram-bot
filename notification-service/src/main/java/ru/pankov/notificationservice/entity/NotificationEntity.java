@@ -32,8 +32,8 @@ public class NotificationEntity {
     @Column(name = "text")
     private String text;
 
-    @Column(name = "is_advance")
-    private Boolean isAdvance;
+    @Column(name = "parent_id")
+    private Long parentId;
 
     @Column(name = "sent")
     private Boolean sent;
@@ -46,7 +46,6 @@ public class NotificationEntity {
         this.date = params.getDate();
         this.notificationType = params.getType();
         this.text = params.getText();
-        this.isAdvance = false;
         this.sent = false;
     }
 
@@ -56,7 +55,7 @@ public class NotificationEntity {
         n.date = entity.getDate().minusDays(3);
         n.notificationType = entity.getNotificationType();
         n.text = entity.getText();
-        n.isAdvance = true;
+        n.parentId = entity.getId();
         n.sent = false;
         return n;
     }
