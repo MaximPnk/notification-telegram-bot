@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.pankov.common.NotificationParams;
 import ru.pankov.common.NotificationType;
+import ru.pankov.common.Period;
 import ru.pankov.telegrambot.common.MessageType;
 import ru.pankov.telegrambot.common.UserSessionStage;
 import ru.pankov.telegrambot.service.NotificationServiceService;
@@ -21,8 +22,6 @@ import ru.pankov.telegrambot.service.ChatSessionService;
 import java.time.LocalDateTime;
 
 /**
- * TODO
- *      Сделать логику, если время события меньше текущего
  * TODO
  *      Микросервис с основной БД должен периодически проверять даты (scheduler)
  *      В случае успеха добавляет рест запрос с инфой по чату и инфе о данном уведомлении
@@ -112,7 +111,7 @@ public class Bot extends TelegramLongPollingBot {
             case ADD_BIRTHDAY_DATE_STAGE:
                 response = AddBirthdayHandler.handleDate(requestMessage, responseMessage, chatSession);
                 if (response.getMessageType() != MessageType.ADD_BIRTHDAY_DATE && response.getMessageType() != MessageType.CREATE_BIRTHDAY) {
-                    chatSession.setTmpBDDate(LocalDateTime.now());
+                    chatSession.setTmpDate(LocalDateTime.now());
                 }
                 break;
             case ADD_EVENT_NAME_STAGE:
@@ -121,20 +120,23 @@ public class Bot extends TelegramLongPollingBot {
             case ADD_EVENT_DATE_STAGE:
                 response = AddEventHandler.handleDate(requestMessage, responseMessage, chatSession);
                 if (response.getMessageType() != MessageType.ADD_EVENT_DATE && response.getMessageType() != MessageType.ADD_EVENT_HOURS) {
-                    chatSession.setTmpBDDate(LocalDateTime.now());
+                    chatSession.setTmpDate(LocalDateTime.now());
                 }
                 break;
             case ADD_EVENT_HOURS_STAGE:
                 response = AddEventHandler.handleHours(requestMessage, responseMessage, chatSession);
                 if (response.getMessageType() != MessageType.ADD_EVENT_HOURS && response.getMessageType() != MessageType.ADD_EVENT_MINUTES) {
-                    chatSession.setTmpBDDate(LocalDateTime.now());
+                    chatSession.setTmpDate(LocalDateTime.now());
                 }
                 break;
             case ADD_EVENT_MINUTES_STAGE:
                 response = AddEventHandler.handleMinutes(requestMessage, responseMessage, chatSession);
-                if (response.getMessageType() != MessageType.ADD_EVENT_MINUTES && response.getMessageType() != MessageType.CREATE_EVENT) {
-                    chatSession.setTmpBDDate(LocalDateTime.now());
+                if (response.getMessageType() != MessageType.ADD_EVENT_MINUTES && response.getMessageType() != MessageType.ADD_PERIOD) {
+                    chatSession.setTmpDate(LocalDateTime.now());
                 }
+                break;
+            case ADD_PERIOD_STAGE:
+                response = AddEventHandler.handlePeriod(requestMessage, responseMessage, chatSession);
                 break;
             case GET_STAGE:
                 response = GetHandler.handle(requestMessage, responseMessage, notificationServiceService.getByChatId(chatId));
@@ -166,21 +168,21 @@ public class Bot extends TelegramLongPollingBot {
                 chatSession.setUserSessionStage(UserSessionStage.ADD_BIRTHDAY_NAME_STAGE);
                 break;
             case ADD_BIRTHDAY_DATE:
-                KeyboardChanger.setDateButtons(responseMessage, chatSession.getTmpBDDate());
+                KeyboardChanger.setDateButtons(responseMessage, chatSession.getTmpDate());
                 chatSession.setUserSessionStage(UserSessionStage.ADD_BIRTHDAY_DATE_STAGE);
                 break;
             case CREATE_BIRTHDAY:
-                notificationServiceService.create(new NotificationParams(chatId, chatSession.getTmpBDDate(), NotificationType.BIRTHDAY, chatSession.getTmpBDName()));
+                notificationServiceService.create(new NotificationParams(chatId, NotificationType.BIRTHDAY, chatSession.getTmpDate(), Period.YEAR, chatSession.getTmpName()));
                 KeyboardChanger.setMainMenuButtons(responseMessage);
                 chatSession.setUserSessionStage(UserSessionStage.MAIN_STAGE);
-                chatSession.setTmpBDDate(LocalDateTime.now());
+                chatSession.setTmpDate(LocalDateTime.now());
                 break;
             case ADD_EVENT_NAME:
                 KeyboardChanger.removeButtons(responseMessage);
                 chatSession.setUserSessionStage(UserSessionStage.ADD_EVENT_NAME_STAGE);
                 break;
             case ADD_EVENT_DATE:
-                KeyboardChanger.setDateButtons(responseMessage, chatSession.getTmpBDDate());
+                KeyboardChanger.setDateButtons(responseMessage, chatSession.getTmpDate());
                 chatSession.setUserSessionStage(UserSessionStage.ADD_EVENT_DATE_STAGE);
                 break;
             case ADD_EVENT_HOURS:
@@ -191,11 +193,15 @@ public class Bot extends TelegramLongPollingBot {
                 KeyboardChanger.setMinutesButtons(responseMessage, chatSession);
                 chatSession.setUserSessionStage(UserSessionStage.ADD_EVENT_MINUTES_STAGE);
                 break;
+            case ADD_PERIOD:
+                KeyboardChanger.setPeriodButtons(responseMessage);
+                chatSession.setUserSessionStage(UserSessionStage.ADD_PERIOD_STAGE);
+                break;
             case CREATE_EVENT:
-                notificationServiceService.create(new NotificationParams(chatId, chatSession.getTmpBDDate(), NotificationType.EVENT, chatSession.getTmpBDName()));
+                notificationServiceService.create(new NotificationParams(chatId, NotificationType.EVENT, chatSession.getTmpDate(), chatSession.getPeriod(), chatSession.getTmpName()));
                 KeyboardChanger.setMainMenuButtons(responseMessage);
                 chatSession.setUserSessionStage(UserSessionStage.MAIN_STAGE);
-                chatSession.setTmpBDDate(LocalDateTime.now());
+                chatSession.setTmpDate(LocalDateTime.now());
                 break;
             case GET:
                 KeyboardChanger.setGetButtons(responseMessage);

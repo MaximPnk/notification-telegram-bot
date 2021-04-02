@@ -3,6 +3,7 @@ package ru.pankov.telegrambot.handler;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import ru.pankov.common.Period;
 import ru.pankov.telegrambot.bot.Response;
 import ru.pankov.telegrambot.common.MessageType;
 import ru.pankov.telegrambot.model.ChatSessionEntity;
@@ -21,7 +22,7 @@ public class AddEventHandler extends Handler {
             return response;
         }
 
-        chatSessionEntity.setTmpBDName(requestMessage.getText());
+        chatSessionEntity.setTmpName(requestMessage.getText());
         responseMessage.setText(ResponseTextGenerator.getAddEventDateText(requestMessage.getText()));
         response.setMessageType(MessageType.ADD_EVENT_DATE);
         response.setMessage(responseMessage);
@@ -38,21 +39,21 @@ public class AddEventHandler extends Handler {
 
         switch (requestMessage.getText()) {
             case "⏪ Пред":
-                LocalDateTime prev = chatSessionEntity.getTmpBDDate().minusMonths(1).withDayOfMonth(1);
-                chatSessionEntity.setTmpBDDate(prev.compareTo(LocalDateTime.now()) < 0 ? LocalDateTime.now() : prev);
+                LocalDateTime prev = chatSessionEntity.getTmpDate().minusMonths(1).withDayOfMonth(1);
+                chatSessionEntity.setTmpDate(prev.compareTo(LocalDateTime.now()) < 0 ? LocalDateTime.now() : prev);
                 responseMessage.setText("Назад");
                 response.setMessageType(MessageType.ADD_EVENT_DATE);
                 break;
             case "След ⏩":
-                chatSessionEntity.setTmpBDDate(chatSessionEntity.getTmpBDDate().plusMonths(1).withDayOfMonth(1));
+                chatSessionEntity.setTmpDate(chatSessionEntity.getTmpDate().plusMonths(1).withDayOfMonth(1));
                 responseMessage.setText("Вперёд");
                 response.setMessageType(MessageType.ADD_EVENT_DATE);
                 break;
             default:
                 try {
                     int day = Integer.parseInt(requestMessage.getText());
-                    LocalDateTime bd = chatSessionEntity.getTmpBDDate().withDayOfMonth(day);
-                    chatSessionEntity.setTmpBDDate(bd);
+                    LocalDateTime bd = chatSessionEntity.getTmpDate().withDayOfMonth(day);
+                    chatSessionEntity.setTmpDate(bd);
                 } catch (NumberFormatException | DateTimeException e) {
                     responseMessage.setText("Неверно указана дата");
                     response.setMessageType(MessageType.ADD_EVENT_DATE);
@@ -74,8 +75,8 @@ public class AddEventHandler extends Handler {
 
         try {
             int hour = Integer.parseInt(requestMessage.getText());
-            LocalDateTime bd = chatSessionEntity.getTmpBDDate().withHour(hour);
-            chatSessionEntity.setTmpBDDate(bd);
+            LocalDateTime bd = chatSessionEntity.getTmpDate().withHour(hour);
+            chatSessionEntity.setTmpDate(bd);
         } catch (NumberFormatException | DateTimeException e) {
             responseMessage.setText("Неверно указана дата");
             response.setMessageType(MessageType.ADD_EVENT_HOURS);
@@ -97,15 +98,58 @@ public class AddEventHandler extends Handler {
 
         try {
             int minute = Integer.parseInt(requestMessage.getText().split(":")[1]);
-            LocalDateTime bd = chatSessionEntity.getTmpBDDate().withMinute(minute);
-            chatSessionEntity.setTmpBDDate(bd);
+            LocalDateTime bd = chatSessionEntity.getTmpDate().withMinute(minute);
+            chatSessionEntity.setTmpDate(bd);
         } catch (Exception e) {
             responseMessage.setText("Неверно указана дата");
             response.setMessageType(MessageType.ADD_EVENT_MINUTES);
             return response;
         }
         responseMessage.setText(ResponseTextGenerator.getCreateText());
-        response.setMessageType(MessageType.CREATE_EVENT);
+        response.setMessageType(MessageType.ADD_PERIOD);
+
+        return response;
+    }
+
+    public static Response handlePeriod(Message requestMessage, SendMessage responseMessage, ChatSessionEntity entity) {
+
+        Response response = new Response();
+        handleCommands(requestMessage, responseMessage, response);
+        if (response.getMessage() != null && response.getMessageType() != null) {
+            return response;
+        }
+
+        switch (requestMessage.getText()) {
+            case "Один раз \uD83D\uDD34":
+                entity.setPeriod(Period.ONCE);
+                responseMessage.setText(ResponseTextGenerator.getCreateText());
+                response.setMessageType(MessageType.CREATE_EVENT);
+                break;
+            case "Каждый день \uD83D\uDFE1":
+                entity.setPeriod(Period.DAY);
+                responseMessage.setText(ResponseTextGenerator.getCreateText());
+                response.setMessageType(MessageType.CREATE_EVENT);
+                break;
+            case "Каждую неделю \uD83D\uDFE2":
+                entity.setPeriod(Period.WEEK);
+                responseMessage.setText(ResponseTextGenerator.getCreateText());
+                response.setMessageType(MessageType.CREATE_EVENT);
+                break;
+            case "Каждый месяц \uD83D\uDD35":
+                entity.setPeriod(Period.MONTH);
+                responseMessage.setText(ResponseTextGenerator.getCreateText());
+                response.setMessageType(MessageType.CREATE_EVENT);
+                break;
+            case "Каждый год \uD83D\uDFE3":
+                entity.setPeriod(Period.YEAR);
+                responseMessage.setText(ResponseTextGenerator.getCreateText());
+                response.setMessageType(MessageType.CREATE_EVENT);
+                break;
+            default:
+                responseMessage.setText(ResponseTextGenerator.getUnsupportedText());
+                response.setMessageType(MessageType.UNSUPPORTED);
+        }
+        response.setMessage(responseMessage);
 
         return response;
     }

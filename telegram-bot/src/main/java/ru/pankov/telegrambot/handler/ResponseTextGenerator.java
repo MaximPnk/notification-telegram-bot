@@ -43,15 +43,16 @@ public class ResponseTextGenerator {
         if (!notifications.isEmpty()) {
             return ("Дни рождения \uD83E\uDD73" + System.lineSeparator() +
                     notifications.stream().filter(n -> n.getType() == NotificationType.BIRTHDAY).sorted(Comparator.comparing(NotificationDTO::getDate))
-                            .map(n ->   "(#" + n.getId() + ") " +
+                            .map(n ->   "\uD83D\uDD38 (#" + n.getId() + ") " +
                                         n.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + " - " +
                                         n.getText())
                             .collect(Collectors.joining(System.lineSeparator())) + System.lineSeparator() + System.lineSeparator() +
                     "События ✅" + System.lineSeparator() +
                     notifications.stream().filter(n -> n.getType() == NotificationType.EVENT).sorted(Comparator.comparing(NotificationDTO::getDate))
-                            .map(n ->   "(#" + n.getId() + ") " +
+                            .map(n ->   "\uD83D\uDD39 (#" + n.getId() + ") " +
                                         n.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")) + " - " +
-                                        n.getText())
+                                        n.getText() + " - " +
+                                        n.getPeriod().getValue())
                             .collect(Collectors.joining(System.lineSeparator())));
         } else {
             return "Список уведомлений пуст";
@@ -62,13 +63,16 @@ public class ResponseTextGenerator {
         if (!notifications.isEmpty()) {
             return ("Дни рождения \uD83E\uDD73" + System.lineSeparator() +
                     notifications.stream().filter(n -> n.getType() == NotificationType.BIRTHDAY).sorted(Comparator.comparing(NotificationDTO::getDate))
-                            .map(n ->   n.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + " - " +
+                            .map(n ->   "\uD83D\uDD38 " +
+                                        n.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + " - " +
                                         n.getText())
                             .collect(Collectors.joining(System.lineSeparator())) + System.lineSeparator() + System.lineSeparator() +
                     "События ✅" + System.lineSeparator() +
                     notifications.stream().filter(n -> n.getType() == NotificationType.EVENT).sorted(Comparator.comparing(NotificationDTO::getDate))
-                            .map(n ->   n.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")) + " - " +
-                                        n.getText())
+                            .map(n ->   "\uD83D\uDD39 " +
+                                        n.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")) + " - " +
+                                        n.getText() + " - " +
+                                        n.getPeriod().getValue())
                             .collect(Collectors.joining(System.lineSeparator())));
         } else {
             return "Список уведомлений пуст";

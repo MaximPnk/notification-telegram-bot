@@ -11,7 +11,7 @@ import ru.pankov.common.NotificationDTO;
 @RestController
 @RequestMapping("/test")
 @RequiredArgsConstructor
-public class NotificationScheduler {
+public class TelegramBotScheduler {
 
     private final TelegramBotClient telegramBotClient;
 

@@ -11,7 +11,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class NotificationParams {
     private Long chatId;
-    private LocalDateTime date;
     private NotificationType type;
+    private LocalDateTime date;
+    private Period period;
     private String text;
 }

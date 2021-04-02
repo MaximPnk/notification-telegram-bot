@@ -70,7 +70,7 @@ public class KeyboardChanger {
     public static void setHoursButtons(SendMessage responseMessage, ChatSessionEntity entity) {
         ReplyKeyboardMarkup markup = addButtons(responseMessage);
         List<KeyboardRow> keyboardRows = new ArrayList<>();
-        LocalDateTime eventDate = entity.getTmpBDDate();
+        LocalDateTime eventDate = entity.getTmpDate();
         int hour = 0;
         if (eventDate.toLocalDate().equals(LocalDate.now())) {
             hour = LocalDateTime.now().getHour();
@@ -80,8 +80,7 @@ public class KeyboardChanger {
         }
         for (int i = 0; i < 4; i++) {
             keyboardRows.add(new KeyboardRow());
-            for (int j = 0; hour < 24; j++) {
-                System.out.println(hour);
+            for (int j = 0; j < 6 && hour < 24; j++) {
                 keyboardRows.get(i).add(hours[hour++]);
             }
         }
@@ -90,10 +89,10 @@ public class KeyboardChanger {
 
     public static void setMinutesButtons(SendMessage responseMessage, ChatSessionEntity entity) {
         ReplyKeyboardMarkup markup = addButtons(responseMessage);
-        LocalDateTime eventDate = entity.getTmpBDDate();
+        LocalDateTime eventDate = entity.getTmpDate();
         List<KeyboardRow> keyboardRows = new ArrayList<KeyboardRow>() {{
-            add(new KeyboardRow() {{ add(entity.getTmpBDDate().getHour() + ":" + minutes[0]); add(entity.getTmpBDDate().getHour() + ":" + minutes[1]); }});
-            add(new KeyboardRow() {{ add(entity.getTmpBDDate().getHour() + ":" + minutes[2]); add(entity.getTmpBDDate().getHour() + ":" + minutes[3]); }});
+            add(new KeyboardRow() {{ add(entity.getTmpDate().getHour() + ":" + minutes[0]); add(entity.getTmpDate().getHour() + ":" + minutes[1]); }});
+            add(new KeyboardRow() {{ add(entity.getTmpDate().getHour() + ":" + minutes[2]); add(entity.getTmpDate().getHour() + ":" + minutes[3]); }});
         }};
         if (eventDate.toLocalDate().equals(LocalDate.now()) && eventDate.getHour() == LocalDateTime.now().getHour()) {
             if (LocalDateTime.now().getMinute() > 15) {
@@ -106,6 +105,18 @@ public class KeyboardChanger {
                 keyboardRows.get(0).remove(0);
             }
         }
+        markup.setKeyboard(keyboardRows);
+    }
+
+    public static void setPeriodButtons(SendMessage responseMessage) {
+        ReplyKeyboardMarkup markup = addButtons(responseMessage);
+        List<KeyboardRow> keyboardRows = new ArrayList<KeyboardRow>() {{
+            add(new KeyboardRow() {{ add("Один раз \uD83D\uDD34"); }});
+            add(new KeyboardRow() {{ add("Каждый день \uD83D\uDFE1"); }});
+            add(new KeyboardRow() {{ add("Каждую неделю \uD83D\uDFE2"); }});
+            add(new KeyboardRow() {{ add("Каждый месяц \uD83D\uDD35"); }});
+            add(new KeyboardRow() {{ add("Каждый год \uD83D\uDFE3"); }});
+        }};
         markup.setKeyboard(keyboardRows);
     }
 

@@ -4,6 +4,7 @@ package ru.pankov.telegrambot.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import ru.pankov.common.Period;
 import ru.pankov.telegrambot.common.UserSessionStage;
 
 import javax.persistence.*;
@@ -23,12 +24,16 @@ public class ChatSessionEntity {
     @Column(name = "user_session_stage_id")
     private UserSessionStage userSessionStage;
 
-    @Column(name = "tmp_bd_name")
-    private String tmpBDName;
+    @Column(name = "tmp_name")
+    private String tmpName;
 
-    @Column(name = "tmp_bd_date")
+    @Column(name = "tmp_date")
     @CreationTimestamp
-    private LocalDateTime tmpBDDate;
+    private LocalDateTime tmpDate;
+
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "tmp_period")
+    private Period period;
 
     @Column(name = "tmp_notification_id")
     private Long tmpNotificationId;

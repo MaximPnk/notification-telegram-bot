@@ -14,4 +14,5 @@ public class NotificationDTO {
     NotificationType type;
     LocalDateTime date;
     String text;
+    Period period;
 }

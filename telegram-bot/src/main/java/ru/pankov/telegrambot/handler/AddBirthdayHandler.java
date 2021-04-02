@@ -21,7 +21,7 @@ public class AddBirthdayHandler extends Handler {
             return response;
         }
 
-        chatSessionEntity.setTmpBDName(requestMessage.getText());
+        chatSessionEntity.setTmpName(requestMessage.getText());
         responseMessage.setText(ResponseTextGenerator.getAddBirthdayDateText(requestMessage.getText()));
         response.setMessageType(MessageType.ADD_BIRTHDAY_DATE);
         response.setMessage(responseMessage);
@@ -38,21 +38,21 @@ public class AddBirthdayHandler extends Handler {
 
         switch (requestMessage.getText()) {
             case "⏪ Пред":
-                LocalDateTime prev = chatSessionEntity.getTmpBDDate().minusMonths(1).withDayOfMonth(1);
-                chatSessionEntity.setTmpBDDate(prev.compareTo(LocalDateTime.now()) < 0 ? LocalDateTime.now() : prev);
+                LocalDateTime prev = chatSessionEntity.getTmpDate().minusMonths(1).withDayOfMonth(1);
+                chatSessionEntity.setTmpDate(prev.compareTo(LocalDateTime.now()) < 0 ? LocalDateTime.now() : prev);
                 responseMessage.setText("Назад");
                 response.setMessageType(MessageType.ADD_BIRTHDAY_DATE);
                 break;
             case "След ⏩":
-                chatSessionEntity.setTmpBDDate(chatSessionEntity.getTmpBDDate().plusMonths(1).withDayOfMonth(1));
+                chatSessionEntity.setTmpDate(chatSessionEntity.getTmpDate().plusMonths(1).withDayOfMonth(1));
                 responseMessage.setText("Вперёд");
                 response.setMessageType(MessageType.ADD_BIRTHDAY_DATE);
                 break;
             default:
                 try {
                     int day = Integer.parseInt(requestMessage.getText());
-                    LocalDateTime bd = chatSessionEntity.getTmpBDDate().withDayOfMonth(day);
-                    chatSessionEntity.setTmpBDDate(bd);
+                    LocalDateTime bd = chatSessionEntity.getTmpDate().withDayOfMonth(day);
+                    chatSessionEntity.setTmpDate(bd);
                 } catch (NumberFormatException | DateTimeException e) {
                     responseMessage.setText("Неверно указана дата");
                     response.setMessageType(MessageType.ADD_BIRTHDAY_DATE);
