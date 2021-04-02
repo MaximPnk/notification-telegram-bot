@@ -23,7 +23,7 @@ public class SendMessageController {
     public Header sendMessage(@RequestBody NotificationDTO notificationDTO, @RequestHeader("auth") String token) {
         log.info(token);
         log.info(this.token);
-        if (!encoder.matches(this.token, token)) {
+        if (!this.token.equals(token)) {
             return new Header(null, 1, "FORBIDDEN");
         }
         log.info("it works");

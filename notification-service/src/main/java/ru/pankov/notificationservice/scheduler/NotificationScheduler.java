@@ -15,11 +15,11 @@ public class NotificationScheduler {
 
     private final TelegramBotClient telegramBotClient;
 
-    @Value("${rest.encoded.token}")
-    String encodedToken;
+    @Value("${rest.token}")
+    String token;
 
     @GetMapping("/")
     public void sendReadyEvent() {
-        telegramBotClient.sendMessage(new NotificationDTO(), encodedToken);
+        telegramBotClient.sendMessage(new NotificationDTO(), token);
     }
 }

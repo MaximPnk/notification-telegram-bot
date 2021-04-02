@@ -19,8 +19,8 @@ public class NotificationServiceService {
     private final NotificationServiceClient notificationServiceClient;
     private ObjectMapper mapper;
 
-    @Value("${rest.encoded.token}")
-    String encodedToken;
+    @Value("${rest.token}")
+    String token;
 
     @PostConstruct
     private void init() {
@@ -29,15 +29,15 @@ public class NotificationServiceService {
     }
 
     public List<NotificationDTO> getByChatId(Long chatId) {
-        return mapper.convertValue(notificationServiceClient.getByChatId(chatId, encodedToken).getBody().getMessage(), new TypeReference<List<NotificationDTO>>() {});
+        return mapper.convertValue(notificationServiceClient.getByChatId(chatId, token).getBody().getMessage(), new TypeReference<List<NotificationDTO>>() {});
     }
 
     public void create(NotificationParams params) {
-        notificationServiceClient.create(params, encodedToken);
+        notificationServiceClient.create(params, token);
     }
 
     public void deleteById(Long id) {
-        notificationServiceClient.deleteById(id, encodedToken);
+        notificationServiceClient.deleteById(id, token);
     }
 
 }
