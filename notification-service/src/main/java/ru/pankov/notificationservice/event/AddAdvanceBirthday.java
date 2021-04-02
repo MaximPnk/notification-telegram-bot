@@ -1,4 +1,4 @@
-package ru.pankov.notificationservice.service;
+package ru.pankov.notificationservice.event;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -7,11 +7,11 @@ import ru.pankov.notificationservice.entity.NotificationEntity;
 
 @Getter
 @Slf4j
-public class AddAdvanceBirthdayNotify extends ApplicationEvent {
+public class AddAdvanceBirthday extends ApplicationEvent {
 
     private final NotificationEntity notification;
 
-    public AddAdvanceBirthdayNotify(Object source, NotificationEntity notification) {
+    public AddAdvanceBirthday(Object source, NotificationEntity notification) {
         super(source);
         this.notification = notification;
     }

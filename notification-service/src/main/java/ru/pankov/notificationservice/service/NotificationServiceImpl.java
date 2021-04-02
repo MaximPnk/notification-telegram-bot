@@ -13,9 +13,12 @@ import ru.pankov.common.NotificationParams;
 import ru.pankov.common.NotificationType;
 import ru.pankov.notificationservice.dao.NotificationRepository;
 import ru.pankov.notificationservice.entity.NotificationEntity;
+import ru.pankov.notificationservice.event.AddAdvanceBirthday;
+import ru.pankov.notificationservice.event.DeleteAdvanceBirthday;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -32,7 +35,7 @@ public class NotificationServiceImpl implements NotificationService {
     public CompletableFuture<Header> save(NotificationParams params) {
         NotificationEntity notificationEntity = notificationRepository.save(new NotificationEntity(params));
         if (params.getType() == NotificationType.BIRTHDAY) {
-            publisher.publishEvent(new AddAdvanceBirthdayNotify(this, notificationEntity));
+            publisher.publishEvent(new AddAdvanceBirthday(this, notificationEntity));
         }
         return CompletableFuture.completedFuture(Header.ok(notificationEntity));
     }
@@ -40,7 +43,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     @Transactional
     public Header findByChatId(Long chatId) {
-        List<NotificationEntity> notifications = notificationRepository.findByChatIdAndIsAdvanceFalse(chatId);
+        List<NotificationEntity> notifications = notificationRepository.findByChatIdAndParentIdIsNull(chatId);
         return Header.ok(notifications.stream().map(n -> new NotificationDTO(n.getId(), n.getNotificationType(), n.getDate(), n.getText())));
     }
 
@@ -48,15 +51,31 @@ public class NotificationServiceImpl implements NotificationService {
     @Async
     @Transactional
     public void deleteById(Long id) {
-        try {
-            notificationRepository.deleteById(id);
-        } catch (EmptyResultDataAccessException ignored) {}
+        Optional<NotificationEntity> notification = notificationRepository.findById(id);
+        if (notification.isPresent()) {
+            notificationRepository.delete(notification.get());
+            publisher.publishEvent(new DeleteAdvanceBirthday(this, notification.get()));
+        } else {
+            log.error("Can't find notification with id = " + id);
+        }
     }
 
     @Override
     @Transactional
     @EventListener
-    public void saveAdvanceBirthday(AddAdvanceBirthdayNotify event) {
+    public void saveAdvanceBirthday(AddAdvanceBirthday event) {
         notificationRepository.save(NotificationEntity.getPreparedBirthday(event.getNotification()));
+    }
+
+    @Override
+    @Transactional
+    @EventListener
+    public void deleteAdvanceBirthday(DeleteAdvanceBirthday event) {
+        Optional<NotificationEntity> notification = notificationRepository.findByParentId(event.getNotification().getId());
+        if (notification.isPresent()) {
+            notificationRepository.delete(notification.get());
+        } else {
+            log.error("Can't find child notification with parent id = " + event.getNotification().getId());
+        }
     }
 }

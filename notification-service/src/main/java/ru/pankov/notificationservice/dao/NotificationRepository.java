@@ -5,9 +5,12 @@ import org.springframework.stereotype.Repository;
 import ru.pankov.notificationservice.entity.NotificationEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<NotificationEntity, Long> {
 
-    List<NotificationEntity> findByChatIdAndIsAdvanceFalse(Long chatId);
+    List<NotificationEntity> findByChatIdAndParentIdIsNull(Long chatId);
+
+    Optional<NotificationEntity> findByParentId(Long id);
 }
