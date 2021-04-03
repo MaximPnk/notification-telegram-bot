@@ -10,6 +10,30 @@ import java.util.stream.Collectors;
 
 public class ResponseTextGenerator {
 
+    public static String getSendText(NotificationDTO n) {
+        String line = "";
+
+        switch (n.getType()) {
+            case ADVANCE_BIRTHDAY:
+                line = "Привет! \uD83D\uDE03" + System.lineSeparator() + System.lineSeparator() +
+                        "У " + n.getText() + " через 3 дня День Рождения! \uD83C\uDF88\uD83C\uDF8A" + System.lineSeparator() +
+                        "Если ты ещё не купил подарок, то самое время это сделать \uD83C\uDF81";
+                break;
+            case BIRTHDAY:
+                line = "И снова привет! ☺️" + System.lineSeparator() + System.lineSeparator() +
+                        "У " + n.getText() + " сегодня День Рождения! \uD83C\uDF89" + System.lineSeparator() +
+                        "Не забудь поздравить именинника \uD83C\uDF82";
+                break;
+            case EVENT:
+                line = "Привет-привет! \uD83D\uDE43" + System.lineSeparator() + System.lineSeparator() +
+                        "Напоминаю тебе о твоём событии " + System.lineSeparator() +
+                        n.getText();
+                break;
+        }
+
+        return line;
+    }
+
     static String getAddText() {
         return "Приступим к созданию нового уведомления." + System.lineSeparator() + System.lineSeparator() +
                 "Выбери из списка интересующую категорию.";

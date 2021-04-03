@@ -43,7 +43,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Transactional
     public Header findByChatId(Long chatId) {
         List<NotificationEntity> notifications = notificationRepository.findByChatIdAndParentIdIsNull(chatId);
-        return Header.ok(notifications.stream().map(n -> new NotificationDTO(n.getId(), n.getNotificationType(), n.getDate(), n.getText(), n.getPeriod())));
+        return Header.ok(notifications.stream().map(n -> new NotificationDTO(n.getId(), n.getChatId(), n.getNotificationType(), n.getDate(), n.getText(), n.getPeriod())));
     }
 
     @Override

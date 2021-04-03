@@ -40,9 +40,6 @@ public class NotificationEntity {
     @Column(name = "parent_id")
     private Long parentId;
 
-    @Column(name = "sent")
-    private Boolean sent;
-
     public NotificationEntity(NotificationParams params) {
         if (params.getType() == NotificationType.BIRTHDAY) {
             params.setDate(params.getDate().withHour(10).withMinute(0).withSecond(0));
@@ -52,18 +49,19 @@ public class NotificationEntity {
         this.period = params.getPeriod();
         this.notificationType = params.getType();
         this.text = params.getText();
-        this.sent = false;
     }
 
     public static NotificationEntity getPreparedBirthday(NotificationEntity entity) {
         NotificationEntity n = new NotificationEntity();
         n.chatId = entity.getChatId();
         n.date = entity.getDate().minusDays(3);
+        if (n.date.isBefore(LocalDateTime.now())) {
+            n.date = n.date.plusYears(1);
+        }
         n.period = entity.getPeriod();
-        n.notificationType = entity.getNotificationType();
+        n.notificationType = NotificationType.ADVANCE_BIRTHDAY;
         n.text = entity.getText();
         n.parentId = entity.getId();
-        n.sent = false;
         return n;
     }
 }

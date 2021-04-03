@@ -11,7 +11,7 @@ spring:
     password: ${pg.password}
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
+    show-sql: false
   application:
     name: notification-service
 

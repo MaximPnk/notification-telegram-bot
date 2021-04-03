@@ -98,10 +98,10 @@ public class KeyboardChanger {
             if (LocalDateTime.now().getMinute() > 15) {
                 keyboardRows.get(0).remove(0);
             }
-            if (LocalDateTime.now().getMinute() > 30) {
+            if (LocalDateTime.now().getMinute() > 15) {
                 keyboardRows.remove(0);
             }
-            if (LocalDateTime.now().getMinute() > 45) {
+            if (LocalDateTime.now().getMinute() > 30) {
                 keyboardRows.get(0).remove(0);
             }
         }

@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @PropertySource(value = "classpath:secret.properties")
 @EnableAsync
+@EnableScheduling
 @EnableDiscoveryClient
 @EnableFeignClients
 public class NotificationServiceApplication {
