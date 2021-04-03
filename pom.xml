@@ -4,12 +4,22 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.4.4</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
     <groupId>ru.pankov</groupId>
     <artifactId>notifier-telegram-bot</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0</version>
     <modules>
         <module>common</module>
+        <module>discovery-server</module>
+        <module>notification-service</module>
+        <module>telegram-bot</module>
     </modules>
 
     <properties>
