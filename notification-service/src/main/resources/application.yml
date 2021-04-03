@@ -22,3 +22,10 @@ eureka:
     service-url:
       defaultZone: http://${host}:3000/eureka/
 
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 160000000
+        readTimeout: 160000000
+

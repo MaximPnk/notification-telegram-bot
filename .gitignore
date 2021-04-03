@@ -6,3 +6,4 @@
 /notification-service/src/main/resources/secret.properties
 /discovery-server/src/main/resources/secret.properties
 common/target
+/HELP.md
