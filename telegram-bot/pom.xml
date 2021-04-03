@@ -10,7 +10,7 @@
     </parent>
     <groupId>ru.pankov</groupId>
     <artifactId>telegram-bot</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>telegram-bot</name>
     <description>Telegram bot</description>
     <properties>
@@ -61,7 +61,7 @@
         <dependency>
             <groupId>ru.pankov</groupId>
             <artifactId>common</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 

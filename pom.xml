@@ -7,7 +7,7 @@
     <groupId>ru.pankov</groupId>
     <artifactId>notifier-telegram-bot</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <modules>
         <module>common</module>
     </modules>

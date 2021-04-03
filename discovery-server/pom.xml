@@ -10,7 +10,7 @@
     </parent>
     <groupId>ru.pankov</groupId>
     <artifactId>discovery-server</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>discovery-server</name>
     <description>Discovery server</description>
     <properties>
