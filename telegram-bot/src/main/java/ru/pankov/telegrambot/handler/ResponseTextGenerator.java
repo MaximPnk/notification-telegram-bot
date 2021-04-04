@@ -44,8 +44,8 @@ public class ResponseTextGenerator {
     }
 
     static String getAddBirthdayDateText(String name) {
-        return "Отлично, давай выберем дату дня рождения для " + name + System.lineSeparator() +
-                "* Я буду оповещать тебя ежегодно";
+        return "Отлично, давай выберем дату (выбери число)" + System.lineSeparator() +
+                "Я буду оповещать тебя каждый год";
     }
 
     static String getAddEventNameText() {
@@ -53,7 +53,7 @@ public class ResponseTextGenerator {
     }
 
     static String getAddEventDateText(String name) {
-        return "Отлично, давай выберем дату для события: " + name;
+        return "Отлично, давай выберем дату (выбери число)" + name;
     }
 
     static String getAddEventHoursText() {
@@ -119,7 +119,7 @@ public class ResponseTextGenerator {
     static String getStartText() {
         return "Привет! \uD83D\uDC4B\uD83C\uDFFC" + System.lineSeparator() + System.lineSeparator() +
                 "Я твой бот, который поможет тебе не забывать о днях рождения и других важных событиях❗️" + System.lineSeparator() + System.lineSeparator() +
-                "В нужно время я буду тебе о них напоминать✅";
+                "В нужное время я буду тебе о них напоминать✅";
     }
 
     static String getHelpText() {
