@@ -95,7 +95,7 @@ public class KeyboardChanger {
             add(new KeyboardRow() {{ add(entity.getTmpDate().getHour() + ":" + minutes[2]); add(entity.getTmpDate().getHour() + ":" + minutes[3]); }});
         }};
         if (eventDate.toLocalDate().equals(LocalDate.now()) && eventDate.getHour() == LocalDateTime.now().getHour()) {
-            if (LocalDateTime.now().getMinute() > 15) {
+            if (LocalDateTime.now().getMinute() > 0) {
                 keyboardRows.get(0).remove(0);
             }
             if (LocalDateTime.now().getMinute() > 15) {
