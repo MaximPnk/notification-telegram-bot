@@ -7,3 +7,6 @@
 /discovery-server/src/main/resources/secret.properties
 common/target
 /HELP.md
+/telegram-bot/src/main/resources/telegram-bot-secret.properties
+/notification-service/src/main/resources/notification-service-secret.properties
+/discovery-server/src/main/resources/discovery-server-secret.properties

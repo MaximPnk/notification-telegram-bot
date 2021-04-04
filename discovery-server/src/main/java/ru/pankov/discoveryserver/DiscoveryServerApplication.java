@@ -7,7 +7,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
 @EnableEurekaServer
-@PropertySource(value = "classpath:secret.properties")
+@PropertySource(value = "classpath:discovery-server-secret.properties")
 public class DiscoveryServerApplication {
 
     public static void main(String[] args) {
