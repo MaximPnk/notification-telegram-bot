@@ -23,7 +23,7 @@ public class AddEventHandler extends Handler {
         }
 
         chatSessionEntity.setTmpName(requestMessage.getText());
-        responseMessage.setText(ResponseTextGenerator.getAddEventDateText(requestMessage.getText()));
+        responseMessage.setText(ResponseTextGenerator.getAddEventDateText());
         response.setMessageType(MessageType.ADD_EVENT_DATE);
         response.setMessage(responseMessage);
         return response;

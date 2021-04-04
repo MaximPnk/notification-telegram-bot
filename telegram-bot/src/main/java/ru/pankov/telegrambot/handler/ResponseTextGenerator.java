@@ -52,8 +52,8 @@ public class ResponseTextGenerator {
         return "Введи название события";
     }
 
-    static String getAddEventDateText(String name) {
-        return "Отлично, давай выберем дату (выбери число)" + name;
+    static String getAddEventDateText() {
+        return "Отлично, давай выберем дату (выбери число)";
     }
 
     static String getAddEventHoursText() {
