@@ -4,7 +4,7 @@
 
 * #### discovery-server
     * Обслуживающий сервер
-    
+
 * #### telegram-bot
     * Клиент discovery-server
     * Ответы на запросы от бота
