@@ -120,7 +120,7 @@ public class ResponseTextGenerator {
     static String getHelpText() {
         return "Для управления ботом необходимо использовать кнопки, которые заменяют клавиатуру." + System.lineSeparator() + System.lineSeparator() +
                 "/return - возврат в главное меню" + System.lineSeparator() + System.lineSeparator() +
-                "Вопросы: @your_notify_bot";
+                "Вопросы: @maximp7";
     }
 
     static String getUnsupportedText() {
