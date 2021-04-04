@@ -21,17 +21,6 @@ import ru.pankov.telegrambot.service.ChatSessionService;
 
 import java.time.LocalDateTime;
 
-/**
- * TODO логирование
- *      1) запись в notification-service в топик кафки
- *      2) прослушивание в listener
- *      3) вывод в подготовленный файл/программу
- * TODO ci/cd:
- *      1) копи-паст секретов из отдельных файлов в докер файле
- *      2) модернизация билда/запуска контейнеров
- *      3) автоматическое подтягивание изменений с редеплоем
- */
-
 @Component
 @Slf4j
 @RequiredArgsConstructor
