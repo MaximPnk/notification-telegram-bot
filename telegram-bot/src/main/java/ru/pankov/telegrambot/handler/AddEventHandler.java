@@ -105,7 +105,7 @@ public class AddEventHandler extends Handler {
             response.setMessageType(MessageType.ADD_EVENT_MINUTES);
             return response;
         }
-        responseMessage.setText(ResponseTextGenerator.getCreateText());
+        responseMessage.setText(ResponseTextGenerator.getAddEventPeriodText());
         response.setMessageType(MessageType.ADD_PERIOD);
 
         return response;

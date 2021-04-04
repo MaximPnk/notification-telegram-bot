@@ -164,6 +164,9 @@ public class Bot extends TelegramLongPollingBot {
                 chatSession.setUserSessionStage(UserSessionStage.ADD_BIRTHDAY_NAME_STAGE);
                 break;
             case ADD_BIRTHDAY_DATE:
+                if (chatSession.getTmpDate() == null) {
+                    chatSession.setTmpDate(LocalDateTime.now());
+                }
                 KeyboardChanger.setDateButtons(responseMessage, chatSession.getTmpDate());
                 chatSession.setUserSessionStage(UserSessionStage.ADD_BIRTHDAY_DATE_STAGE);
                 break;
@@ -178,6 +181,9 @@ public class Bot extends TelegramLongPollingBot {
                 chatSession.setUserSessionStage(UserSessionStage.ADD_EVENT_NAME_STAGE);
                 break;
             case ADD_EVENT_DATE:
+                if (chatSession.getTmpDate() == null) {
+                    chatSession.setTmpDate(LocalDateTime.now());
+                }
                 KeyboardChanger.setDateButtons(responseMessage, chatSession.getTmpDate());
                 chatSession.setUserSessionStage(UserSessionStage.ADD_EVENT_DATE_STAGE);
                 break;

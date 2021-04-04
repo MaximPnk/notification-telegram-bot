@@ -56,11 +56,15 @@ public class ResponseTextGenerator {
     }
 
     static String getAddEventHoursText() {
-        return "Выбери час уведомления";
+        return "Выбери в котором часу тебя оповестить";
     }
 
     static String getAddEventMinutesText() {
-        return "Выбери время уведомления";
+        return "Укажи точное время";
+    }
+
+    static String getAddEventPeriodText() {
+        return "Будет ли событие повторяться?";
     }
 
     static String getDeleteText(List<NotificationDTO> notifications) {
@@ -111,10 +115,10 @@ public class ResponseTextGenerator {
         return "Уведомление успешно добавлено";
     }
 
-    static String getStartText(String userName) {
-        return "Привет, " + userName + "!\uD83D\uDC4B\uD83C\uDFFC" + System.lineSeparator() + System.lineSeparator() +
-                "Я твой бот, который поможет тебе никогда не забывать о дне рождения, списке дел или предстоящем мероприятии❗️" + System.lineSeparator() + System.lineSeparator() +
-                "Я умею не только запоминать твои важные события, но и напоминать о них заранее✅";
+    static String getStartText() {
+        return "Привет! \uD83D\uDC4B\uD83C\uDFFC" + System.lineSeparator() + System.lineSeparator() +
+                "Я твой бот, который поможет тебе не забывать о днях рождения и других важных событиях❗️" + System.lineSeparator() + System.lineSeparator() +
+                "В нужно время я буду тебе о них напоминать✅";
     }
 
     static String getHelpText() {

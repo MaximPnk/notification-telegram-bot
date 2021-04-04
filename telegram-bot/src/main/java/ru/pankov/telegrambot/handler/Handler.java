@@ -15,7 +15,7 @@ public class Handler {
                 response.setMessage(responseMessage);
                 break;
             case "/start":
-                responseMessage.setText(ResponseTextGenerator.getStartText(requestMessage.getFrom().getUserName()));
+                responseMessage.setText(ResponseTextGenerator.getStartText());
                 response.setMessageType(MessageType.START);
                 response.setMessage(responseMessage);
                 break;
