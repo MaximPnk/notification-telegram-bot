@@ -44,7 +44,8 @@ public class ResponseTextGenerator {
     }
 
     static String getAddBirthdayDateText(String name) {
-        return "Отлично, давай выберем дату дня рождения для " + name;
+        return "Отлично, давай выберем дату дня рождения для " + name + System.lineSeparator() +
+                "* Я буду оповещать тебя ежегодно";
     }
 
     static String getAddEventNameText() {
