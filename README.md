@@ -29,6 +29,7 @@
 
 ### TODO:
 
+* Timezones
 * Логирование
 * CI/CD
 * BD backup
