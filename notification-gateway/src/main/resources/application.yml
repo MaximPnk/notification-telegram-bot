@@ -1,0 +1,33 @@
+server:
+  port: 5555
+  servlet:
+    context-path: /notification-gateway
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${pg.url}
+    username: ${pg.user}
+    password: ${pg.password}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+  application:
+    name: notification-gateway
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${host}:3000/eureka/
+  instance:
+    prefer-ip-address: true
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 160000000
+        readTimeout: 160000000
+

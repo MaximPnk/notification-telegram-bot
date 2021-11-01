@@ -8,3 +8,6 @@ common/target
 /notification-service/src/main/resources/notification-service-secret.properties
 /discovery-server/src/main/resources/discovery-server-secret.properties
 /TODO.md
+/notification-bot/src/main/resources/bot-secret.properties
+/notification-discovery-server/src/main/resources/discovery-server-secret.properties
+/notification-gateway/src/main/resources/gateway-secret.properties

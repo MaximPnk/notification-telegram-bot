@@ -12,14 +12,14 @@
     </parent>
 
     <groupId>ru.pankov</groupId>
-    <artifactId>notifier-telegram-bot</artifactId>
+    <artifactId>notification-telegram-bot</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0</version>
     <modules>
         <module>common</module>
-        <module>discovery-server</module>
-        <module>notification-service</module>
-        <module>telegram-bot</module>
+        <module>notification-discovery-server</module>
+        <module>notification-gateway</module>
+        <module>notification-bot</module>
     </modules>
 
     <properties>
