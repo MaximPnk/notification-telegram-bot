@@ -53,8 +53,8 @@ jobs:
             docker ps -a | grep "mxpnk/notification-service" | awk '{ print $1 }' | xargs docker container rm
             docker image ls | grep "mxpnk/notification-service" | awk '{ print $3 }' | xargs docker rmi
             docker pull mxpnk/notification-service
-            docker run -d -p 8080:8080 mxpnk/notification-service
+            docker run -d -p 5555:5555 mxpnk/notification-service
             docker logout
           host: ${{ secrets.DEPLOY_SERVER_HOST }}
           user: root
-          key: ${{ secrets.DEPLOY_SERVER_KEY}}
+          key: ${{ secrets.DEPLOY_SERVER_KEY }}
