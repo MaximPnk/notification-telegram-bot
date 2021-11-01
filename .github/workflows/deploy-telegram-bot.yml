@@ -56,4 +56,4 @@ jobs:
             docker logout
           host: ${{ secrets.DEPLOY_SERVER_HOST }}
           user: root
-          key: ${{ secrets.DEPLOY_SERVER_KEY}}
+          key: ${{ secrets.DEPLOY_SERVER_KEY }}
