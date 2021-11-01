@@ -1,4 +1,4 @@
-name: deploy notification-service
+name: deploy notification-gateway
 
 on:
   workflow_dispatch:
@@ -13,7 +13,7 @@ jobs:
       - name: Create secret
         uses: 1arp/create-a-file-action@0.2
         with:
-          path: 'notification-service/src/main/resources/'
+          path: 'notification-gateway/src/main/resources/'
           file: '${{ secrets.NOTIFICATION_SERVICE_SECRET_NAME }}'
           content: |
             ${{ secrets.NOTIFICATION_SERVICE_SECRET_VALUE }}
@@ -40,20 +40,20 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./
-          file: notification-service/Dockerfile
+          file: notification-gateway/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/notification-service:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/notification-gateway:latest
 
       - name: Deploy
         uses: fifsky/ssh-action@master
         with:
           command: |
             docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-            docker ps | grep "mxpnk/notification-service" | awk '{ print $1 }' | xargs docker stop
-            docker ps -a | grep "mxpnk/notification-service" | awk '{ print $1 }' | xargs docker container rm
-            docker image ls | grep "mxpnk/notification-service" | awk '{ print $3 }' | xargs docker rmi
-            docker pull mxpnk/notification-service
-            docker run -d -p 5555:5555 mxpnk/notification-service
+            docker ps | grep "mxpnk/notification-gateway" | awk '{ print $1 }' | xargs docker stop
+            docker ps -a | grep "mxpnk/notification-gateway" | awk '{ print $1 }' | xargs docker container rm
+            docker image ls | grep "mxpnk/notification-gateway" | awk '{ print $3 }' | xargs docker rmi
+            docker pull mxpnk/notification-gateway
+            docker run -d -p 5555:5555 mxpnk/notification-gateway
             docker logout
           host: ${{ secrets.DEPLOY_SERVER_HOST }}
           user: root
