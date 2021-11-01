@@ -1,4 +1,4 @@
-name: deploy telegram-bot
+name: deploy notification-bot
 
 on:
   workflow_dispatch:
@@ -13,7 +13,7 @@ jobs:
       - name: Create secret
         uses: 1arp/create-a-file-action@0.2
         with:
-          path: 'telegram-bot/src/main/resources/'
+          path: 'notification-bot/src/main/resources/'
           file: '${{ secrets.TELEGRAM_BOT_SECRET_NAME }}'
           content: |
             ${{ secrets.TELEGRAM_BOT_SECRET_VALUE }}
@@ -39,20 +39,20 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./
-          file: telegram-bot/Dockerfile
+          file: notification-bot/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/telegram-bot:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/notification-bot:latest
 
       - name: Deploy
         uses: fifsky/ssh-action@master
         with:
           command: |
             docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-            docker ps | grep "mxpnk/telegram-bot" | awk '{ print $1 }' | xargs docker stop
-            docker ps -a | grep "mxpnk/telegram-bot" | awk '{ print $1 }' | xargs docker container rm
-            docker image ls | grep "mxpnk/telegram-bot" | awk '{ print $3 }' | xargs docker rmi
-            docker pull mxpnk/telegram-bot
-            docker run -d -p 8189:8189 mxpnk/telegram-bot
+            docker ps | grep "mxpnk/notification-bot" | awk '{ print $1 }' | xargs docker stop
+            docker ps -a | grep "mxpnk/notification-bot" | awk '{ print $1 }' | xargs docker container rm
+            docker image ls | grep "mxpnk/notification-bot" | awk '{ print $3 }' | xargs docker rmi
+            docker pull mxpnk/notification-bot
+            docker run -d -p 8189:8189 mxpnk/notification-bot
             docker logout
           host: ${{ secrets.DEPLOY_SERVER_HOST }}
           user: root
