@@ -1,0 +1,59 @@
+name: deploy telegram-bot
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - name: Create secret
+        uses: 1arp/create-a-file-action@0.2
+        with:
+          path: 'telegram-bot/src/main/resources/'
+          file: '${{ secrets.TELEGRAM_BOT_SECRET_NAME }}'
+          content: |
+            ${{ secrets.TELEGRAM_BOT_SECRET_VALUE }}
+
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+          cache: 'maven'
+      
+      - name: Build with Maven
+        run: mvn -B clean package -DskipTests
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: telegram-bot/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/telegram-bot:latest
+
+      - name: Deploy
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+            docker ps | grep "mxpnk/telegram-bot" | awk '{ print $1 }' | xargs docker stop
+            docker ps -a | grep "mxpnk/telegram-bot" | awk '{ print $1 }' | xargs docker container rm
+            docker image ls | grep "mxpnk/telegram-bot" | awk '{ print $3 }' | xargs docker rmi
+            docker pull mxpnk/telegram-bot
+            docker run -d -p 9090:9090 mxpnk/telegram-bot
+            docker logout
+          host: ${{ secrets.DEPLOY_SERVER_HOST }}
+          user: root
+          key: ${{ secrets.DEPLOY_SERVER_KEY}}
