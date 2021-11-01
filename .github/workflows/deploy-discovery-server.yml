@@ -1,4 +1,4 @@
-name: deploy discovery-server
+name: deploy notification-discovery-server
 
 on:
   workflow_dispatch:
@@ -13,7 +13,7 @@ jobs:
       - name: Create secret
         uses: 1arp/create-a-file-action@0.2
         with:
-          path: 'discovery-server/src/main/resources/'
+          path: 'notification-discovery-server/src/main/resources/'
           file: '${{ secrets.DISCOVERY_SERVER_SECRET_NAME }}'
           content: |
             ${{ secrets.DISCOVERY_SERVER_SECRET_VALUE }}
@@ -40,20 +40,20 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./
-          file: discovery-server/Dockerfile
+          file: notification-discovery-server/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/discovery-server:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/notification-discovery-server:latest
 
       - name: Deploy
         uses: fifsky/ssh-action@master
         with:
           command: |
             docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-            docker ps | grep "mxpnk/discovery-server" | awk '{ print $1 }' | xargs docker stop
-            docker ps -a | grep "mxpnk/discovery-server" | awk '{ print $1 }' | xargs docker container rm
-            docker image ls | grep "mxpnk/discovery-server" | awk '{ print $3 }' | xargs docker rmi
-            docker pull mxpnk/discovery-server
-            docker run -d -p 3000:3000 mxpnk/discovery-server
+            docker ps | grep "mxpnk/notification-discovery-server" | awk '{ print $1 }' | xargs docker stop
+            docker ps -a | grep "mxpnk/notification-discovery-server" | awk '{ print $1 }' | xargs docker container rm
+            docker image ls | grep "mxpnk/notification-discovery-server" | awk '{ print $3 }' | xargs docker rmi
+            docker pull mxpnk/notification-discovery-server
+            docker run -d -p 3000:3000 mxpnk/notification-discovery-server
             docker logout
           host: ${{ secrets.DEPLOY_SERVER_HOST }}
           user: root
