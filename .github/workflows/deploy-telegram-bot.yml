@@ -52,7 +52,7 @@ jobs:
             docker ps -a | grep "mxpnk/telegram-bot" | awk '{ print $1 }' | xargs docker container rm
             docker image ls | grep "mxpnk/telegram-bot" | awk '{ print $3 }' | xargs docker rmi
             docker pull mxpnk/telegram-bot
-            docker run -d -p 9090:9090 mxpnk/telegram-bot
+            docker run -d -p 8189:8189 mxpnk/telegram-bot
             docker logout
           host: ${{ secrets.DEPLOY_SERVER_HOST }}
           user: root
