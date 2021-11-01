@@ -11,5 +11,5 @@ ENV TZ=Europe/Moscow
 RUN rm -rf /var/cache/apk/*
 
 WORKDIR /notification-service
-COPY target/notification-service-1.0.0.jar notification-service.jar
+COPY notification-service/target/notification-service-1.0.0.jar notification-service.jar
 ENTRYPOINT ["java","-jar","notification-service.jar"]

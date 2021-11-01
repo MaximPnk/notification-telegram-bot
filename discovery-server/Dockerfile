@@ -11,5 +11,5 @@ ENV TZ=Europe/Moscow
 RUN rm -rf /var/cache/apk/*
 
 WORKDIR /discovery-server
-COPY target/discovery-server-1.0.0.jar discovery-server.jar
+COPY discovery-server/target/discovery-server-1.0.0.jar discovery-server.jar
 ENTRYPOINT ["java","-jar","discovery-server.jar"]
