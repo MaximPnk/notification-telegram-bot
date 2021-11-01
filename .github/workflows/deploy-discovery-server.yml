@@ -53,8 +53,8 @@ jobs:
             docker ps -a | grep "mxpnk/discovery-server" | awk '{ print $1 }' | xargs docker container rm
             docker image ls | grep "mxpnk/discovery-server" | awk '{ print $3 }' | xargs docker rmi
             docker pull mxpnk/discovery-server
-            docker run -d -p 8080:8080 mxpnk/discovery-server
+            docker run -d -p 3000:3000 mxpnk/discovery-server
             docker logout
           host: ${{ secrets.DEPLOY_SERVER_HOST }}
           user: root
-          key: ${{ secrets.DEPLOY_SERVER_KEY}}
+          key: ${{ secrets.DEPLOY_SERVER_KEY }}
